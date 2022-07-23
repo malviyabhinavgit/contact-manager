@@ -1,0 +1,14 @@
+{
+  "firstName": "abhinav",
+  "lastName": "string",
+  "contactDetail": {
+    "mobileNumber": [
+      "+44208012121"
+    ],
+    "address": {
+      "firstLineOfAddress": "Bank Street",
+      "secondLineOfAddress": "",
+      "postcode": ""
+    }
+  }
+}

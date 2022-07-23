@@ -1,0 +1,23 @@
+server:
+  port: 8080
+info:
+  artifact: contact-manager
+  name: contact-manager
+  description: contact-manager
+  version: 1.0.0
+
+#Exposes Spring actuator endpoints
+management:
+  health:
+    diskspace:
+      enabled: true
+    application:
+      enabled: true
+  endpoint:
+    health:
+      show-details: NEVER
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: "*"

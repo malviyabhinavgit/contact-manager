@@ -1,0 +1,12 @@
+{
+  "firstName": "abhinav",
+  "lastName": "string",
+  "contactDetail": {
+    "mobileNumber": [],
+    "address": {
+      "firstLineOfAddress": "Bank Street",
+      "secondLineOfAddress": "",
+      "postcode": "E14 5JP"
+    }
+  }
+}
