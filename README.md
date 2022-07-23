@@ -8,7 +8,7 @@ Execute the following command from the parent directory to build the jar file:
 mvn clean install
 ```
 ### Application Run
-From the parent directory, execute the following command to start the application:
+From the parent directory, execute the following command from command prompt or git-bash to start the application:
 ```
 java -jar -Dspring.profiles.active=local target/contact-manager-0.0.1-SNAPSHOT.jar
 ```
@@ -19,11 +19,11 @@ Run ContactManagerApplication.java  with VM options  -Dspring.profiles.active=lo
 
 ####API Details(all URLS are mentioned assuming you run application locally)
 
-* Exposes an easy to use swagger url to get started with the APIs. http://localhost:8080/swagger-ui/index.html.
+* Exposes simple-to-use swagger url to get started with the APIs. http://localhost:8080/swagger-ui/index.html.
 * Exposes POST API to create contact. Swagger link: http://localhost:8080/swagger-ui/index.html#/contact-controller/createContact 
 * Exposes GET API to get Contact for a given contactId. Swagger Link: http://localhost:8080/swagger-ui/index.html#/contact-controller/getContact
 * Exposes GET API to get Contacts for a bunch of contactIds. Swagger Link: http://localhost:8080/swagger-ui/index.html#/contact-controller/getContacts
-* All above mentioned URLs will work only when the application is running using the steps mentioned above.
+* All above-mentioned URLs will work only when the application is running using the steps mentioned above.
 
 ##
 ##Local Swagger Endpoint URL
