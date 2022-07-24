@@ -26,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/contact")
-@OpenAPIDefinition(info = @Info(title = "Contact-Manager", description = "Api to store/Retrieve Contacts over HTTP",
+@OpenAPIDefinition(info = @Info(title = "Contact-Manager API", description = "Api to store/retrieve contacts over HTTP",
         version = "v1", license = @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0")))
 public class ContactController {
 
