@@ -26,7 +26,7 @@ Run ContactManagerApplication.java  with VM options  -Dspring.profiles.active=lo
 * All mentioned URLs will work only when the application is running using the steps mentioned above.
 
 ##
-##Local Swagger Endpoint URL
+## Local Swagger Endpoint URL
 http://localhost:8080/swagger-ui/index.html#/contact-controller/createContact
 
 ##### Sample payload for create contact using swgger
@@ -85,7 +85,7 @@ curl -X 'GET' \
   'http://localhost:8080/api/contact/?contactIds=1&contactIds=2&contactIds=3' \
   -H 'accept: application/json'
 ````
-##### actuator endpoints
+##### Actuator Endpoints
 http://localhost:8080/actuator/health
 
 http://localhost:8080/actuator/info
