@@ -5,8 +5,10 @@
     "mobileNumber": [],
     "address": {
       "firstLineOfAddress": "Bank Street",
-      "secondLineOfAddress": "",
-      "postcode": "E14 5JP"
+      "lastLineOfAddress": "",
+      "city": "London",
+      "postcode": "E14 5JP",
+      "country": "UK"
     }
   }
 }

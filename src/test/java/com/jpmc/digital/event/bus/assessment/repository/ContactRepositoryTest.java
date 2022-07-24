@@ -6,8 +6,8 @@ import com.jpmc.digital.event.bus.assessment.repository.jpa.ContactRepositoryJpa
 import com.jpmc.digital.event.bus.assessment.service.ContactNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.util.ResourceUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
@@ -24,7 +24,7 @@ class ContactRepositoryTest {
 
     @Test
     void shouldCreateContactWhenSavedWithValidContactDto() throws IOException {
-        Contact contact = objectMapper.readValue(new File(VALID_CONTACT_JSON), Contact.class);
+        Contact contact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
         when(contactRepositoryJpa.save(contact)).thenReturn(contact);
         assertEquals(contact, new ContactRepositoryImpl(contactRepositoryJpa).save(contact));
         verify(contactRepositoryJpa, times(1)).save(contact);
@@ -32,7 +32,7 @@ class ContactRepositoryTest {
 
     @Test
     void shouldGetContactWhenContactExists() throws IOException {
-        Contact contact = objectMapper.readValue(new File(VALID_CONTACT_JSON), Contact.class);
+        Contact contact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
         when(contactRepositoryJpa.findById(TEST_CONTACT_ID)).thenReturn(Optional.of(contact));
         assertEquals(contact, new ContactRepositoryImpl(contactRepositoryJpa).getContact(TEST_CONTACT_ID));
         verify(contactRepositoryJpa, times(1)).findById(TEST_CONTACT_ID);
@@ -48,7 +48,7 @@ class ContactRepositoryTest {
 
     @Test
     void shouldGetContactsWhenContactExistsForGivenContactIds() throws IOException {
-        Contact contact = objectMapper.readValue(new File(VALID_CONTACT_JSON), Contact.class);
+        Contact contact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
         when(contactRepositoryJpa.findAllById(Collections.singletonList(TEST_CONTACT_ID))).thenReturn(Collections.singletonList(contact));
         assertEquals(Collections.singletonList(contact), new ContactRepositoryImpl(contactRepositoryJpa).getContacts(Collections.singletonList(TEST_CONTACT_ID)));
         verify(contactRepositoryJpa, times(1)).findAllById(Collections.singletonList(TEST_CONTACT_ID));

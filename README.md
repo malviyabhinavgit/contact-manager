@@ -14,7 +14,8 @@ java -jar -Dspring.profiles.active=local target/contact-manager-0.0.1-SNAPSHOT.j
 ```
 
 ## Application Run from IDE(Intellij)
-Run ContactManagerApplication.java  with VM options  -Dspring.profiles.active=local
+Run ContactManagerApplication.java  
+VM options  -Dspring.profiles.active=local
  
 
 ####API Details(all URLS are mentioned assuming you run application locally)
@@ -41,8 +42,10 @@ POST
     ],
     "address": {
       "firstLineOfAddress": "Bank Street",
-      "secondLineOfAddress": "",
-      "postcode": "E14 5JP"
+      "lastLineOfAddress": "",
+      "city": "London",
+      "postcode": "E14 5JP",
+      "country": "UK"
     }
   }
 }
@@ -54,19 +57,21 @@ curl -X 'POST' \
   -H 'accept: */*' \
   -H 'Content-Type: application/json' \
   -d '{
-        "firstName": "abhinav",
-        "lastName": "string",
-        "contactDetail": {
-          "mobileNumber": [
-            "+44208012121"
-          ],
-          "address": {
-            "firstLineOfAddress": "Bank Street",
-            "secondLineOfAddress": "",
-            "postcode": "E14 5JP"
-          }
-        }
-      }'
+  "firstName": "abhinav",
+  "lastName": "string",
+  "contactDetail": {
+    "mobileNumber": [
+      "+44208012121"
+    ],
+    "address": {
+      "firstLineOfAddress": "Bank Street",
+      "lastLineOfAddress": "",
+      "city": "London",
+      "postcode": "E14 5JP",
+      "country": "UK"
+    }
+  }
+}'
 ````
 
 ##### Sample curl command for retrieving a contact

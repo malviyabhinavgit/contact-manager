@@ -7,8 +7,10 @@
     ],
     "address": {
       "firstLineOfAddress": "Bank Street",
-      "secondLineOfAddress": "",
-      "postcode": ""
+      "lastLineOfAddress": "",
+      "city": "London",
+      "postcode": "",
+      "country": "UK"
     }
   }
 }

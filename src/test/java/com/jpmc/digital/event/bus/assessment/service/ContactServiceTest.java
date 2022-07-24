@@ -6,8 +6,8 @@ import com.jpmc.digital.event.bus.assessment.entity.ContactDTO;
 import com.jpmc.digital.event.bus.assessment.repository.ContactRepositoryImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.util.ResourceUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 
@@ -29,14 +29,14 @@ class ContactServiceTest {
     @Test
     void shouldCreateContactWhenCalledWithValidContactDto() throws IOException {
         contactService = new ContactServiceImpl(contactRepository, contactValidator);
-        ContactDTO validContactDTO = objectMapper.readValue(new File(VALID_CONTACT_DTO_JSON), ContactDTO.class);
+        ContactDTO validContactDTO = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_DTO_JSON), ContactDTO.class);
         contactService.save(validContactDTO);
         verify(contactRepository, times(1)).save(any());
     }
 
     @Test
     void shouldGetContactWhenContactExists() throws IOException {
-        Contact validContact = objectMapper.readValue(new File(VALID_CONTACT_JSON), Contact.class);
+        Contact validContact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
         when(contactRepository.getContact(TEST_CONTACT_ID)).thenReturn(validContact);
         contactService = new ContactServiceImpl(contactRepository, contactValidator);
         assertEquals(validContact, contactService.getContact(TEST_CONTACT_ID));
@@ -51,7 +51,7 @@ class ContactServiceTest {
 
     @Test
     void shouldGetContactsWhenContactExistsForGivenContactIds() throws IOException {
-        Contact validContact = objectMapper.readValue(new File(VALID_CONTACT_JSON), Contact.class);
+        Contact validContact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
         when(contactRepository.getContacts(Collections.singletonList(TEST_CONTACT_ID))).thenReturn(Collections.singletonList(validContact));
         contactService = new ContactServiceImpl(contactRepository, contactValidator);
         assertEquals(Collections.singletonList(validContact), contactService.getContacts(Collections.singletonList(TEST_CONTACT_ID)));
@@ -60,7 +60,7 @@ class ContactServiceTest {
     @Test
     void shouldThrowMandatoryFieldNotPresentExceptionWhenCalledWithInvalidContactDto() throws IOException {
         contactService = new ContactServiceImpl(contactRepository, contactValidator);
-        ContactDTO invalidContactDTO = objectMapper.readValue(new File(CONTACT_DTO_WITHOUT_FIRST_NAME_JSON), ContactDTO.class);
+        ContactDTO invalidContactDTO = objectMapper.readValue(ResourceUtils.getFile(CONTACT_DTO_WITHOUT_FIRST_NAME_JSON), ContactDTO.class);
         assertThrows(MandatoryFieldNotPresentException.class, () -> contactService.save(invalidContactDTO));
     }
 

@@ -18,8 +18,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.util.ResourceUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -34,137 +34,137 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ContactManagerApplicationTests {
 
-	@Autowired
-	private ContactController contactController;
+    @Autowired
+    private ContactController contactController;
 
-	@Autowired
-	private ContactService contactService;
+    @Autowired
+    private ContactService contactService;
 
-	@Autowired
-	private ContactValidator contactValidator;
+    @Autowired
+    private ContactValidator contactValidator;
 
-	@Autowired
-	private ContactRepositoryImpl contactRepository;
+    @Autowired
+    private ContactRepositoryImpl contactRepository;
 
-	@Autowired
-	private TestRestTemplate restTemplate;
+    @Autowired
+    private TestRestTemplate restTemplate;
 
-	@LocalServerPort
-	int randomServerPort;
+    @LocalServerPort
+    int randomServerPort;
 
-	private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-	@Test
-	void contextLoads() {
-		assertNotNull(contactController);
-		assertNotNull(contactService);
-		assertNotNull(contactValidator);
-		assertNotNull(contactRepository);
-	}
+    @Test
+    void contextLoads() {
+        assertNotNull(contactController);
+        assertNotNull(contactService);
+        assertNotNull(contactValidator);
+        assertNotNull(contactRepository);
+    }
 
-	@Test
-	void shouldCreateContactWhenPostedRightContactDto() throws URISyntaxException, IOException {
-		final String baseUrl = LOCAL_HOST + randomServerPort + CONTACT_API_BASE_PATH;
-		URI uri = new URI(baseUrl);
+    @Test
+    void shouldCreateContactWhenPostedRightContactDto() throws URISyntaxException, IOException {
+        final String baseUrl = LOCAL_HOST + randomServerPort + CONTACT_API_BASE_PATH;
+        URI uri = new URI(baseUrl);
 
-		HttpHeaders headers = new HttpHeaders();
-		ContactDTO validContactDto = this.objectMapper.readValue(new File(VALID_CONTACT_DTO_JSON), ContactDTO.class);
-		HttpEntity<ContactDTO> request = new HttpEntity<>(validContactDto, headers);
+        HttpHeaders headers = new HttpHeaders();
+        ContactDTO validContactDto = this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_DTO_JSON), ContactDTO.class);
+        HttpEntity<ContactDTO> request = new HttpEntity<>(validContactDto, headers);
 
-		ResponseEntity<Contact> result = this.restTemplate.postForEntity(uri, request, Contact.class);
+        ResponseEntity<Contact> result = this.restTemplate.postForEntity(uri, request, Contact.class);
 
-		//Verify request succeed
-		assertEquals(201, result.getStatusCodeValue());
-		assertNotNull(result.getBody());
+        //Verify request succeed
+        assertEquals(201, result.getStatusCodeValue());
+        assertNotNull(result.getBody());
 
-		uri = new URI(baseUrl + result.getBody().getId());
-		assertEquals(result.getBody(), this.restTemplate.getForObject(uri, Contact.class));
-	}
+        uri = new URI(baseUrl + result.getBody().getId());
+        assertEquals(result.getBody(), this.restTemplate.getForObject(uri, Contact.class));
+    }
 
-	@Test
-	void shouldGetBadRequestWhenPostedInvalidContactDto() throws URISyntaxException, IOException {
-		final String baseUrl = LOCAL_HOST + randomServerPort + CONTACT_API_BASE_PATH;
-		URI uri = new URI(baseUrl);
+    @Test
+    void shouldGetBadRequestWhenPostedInvalidContactDto() throws URISyntaxException, IOException {
+        final String baseUrl = LOCAL_HOST + randomServerPort + CONTACT_API_BASE_PATH;
+        URI uri = new URI(baseUrl);
 
-		HttpHeaders headers = new HttpHeaders();
-		ContactDTO invalidContactDto = this.objectMapper.readValue(new File(CONTACT_DTO_WITHOUT_FIRST_NAME_JSON), ContactDTO.class);
-		HttpEntity<ContactDTO> request = new HttpEntity<>(invalidContactDto, headers);
-		ResponseEntity<Contact> result = this.restTemplate.postForEntity(uri, request, Contact.class);
+        HttpHeaders headers = new HttpHeaders();
+        ContactDTO invalidContactDto = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_DTO_WITHOUT_FIRST_NAME_JSON), ContactDTO.class);
+        HttpEntity<ContactDTO> request = new HttpEntity<>(invalidContactDto, headers);
+        ResponseEntity<Contact> result = this.restTemplate.postForEntity(uri, request, Contact.class);
 
-		//Verify request succeed
-		assertEquals(400, result.getStatusCodeValue());
+        //Verify request succeed
+        assertEquals(400, result.getStatusCodeValue());
 
-	}
+    }
 
-	@Test
-	void shouldGetContactsWhenContactExistsForGivenContactIds() throws URISyntaxException, IOException {
-		final String baseUrl = LOCAL_HOST + randomServerPort + CONTACT_API_BASE_PATH;
-		URI uri = new URI(baseUrl);
+    @Test
+    void shouldGetContactsWhenContactExistsForGivenContactIds() throws URISyntaxException, IOException {
+        final String baseUrl = LOCAL_HOST + randomServerPort + CONTACT_API_BASE_PATH;
+        URI uri = new URI(baseUrl);
 
-		HttpHeaders headers = new HttpHeaders();
-		ContactDTO validContactDto = this.objectMapper.readValue(new File(VALID_CONTACT_DTO_JSON), ContactDTO.class);
+        HttpHeaders headers = new HttpHeaders();
+        ContactDTO validContactDto = this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_DTO_JSON), ContactDTO.class);
 
-		HttpEntity<ContactDTO> request = new HttpEntity<>(validContactDto, headers);
-		ResponseEntity<Contact> result = this.restTemplate.postForEntity(uri, request, Contact.class);
+        HttpEntity<ContactDTO> request = new HttpEntity<>(validContactDto, headers);
+        ResponseEntity<Contact> result = this.restTemplate.postForEntity(uri, request, Contact.class);
 
-		//Verify request succeed
-		assertEquals(201, result.getStatusCodeValue());
-		assertNotNull(result.getBody());
+        //Verify request succeed
+        assertEquals(201, result.getStatusCodeValue());
+        assertNotNull(result.getBody());
 
-		request = new HttpEntity<>(validContactDto, headers);
-		ResponseEntity<Contact> anotherResult = this.restTemplate.postForEntity(uri, request, Contact.class);
+        request = new HttpEntity<>(validContactDto, headers);
+        ResponseEntity<Contact> anotherResult = this.restTemplate.postForEntity(uri, request, Contact.class);
 
-		//Verify request succeed
-		assertEquals(201, anotherResult.getStatusCodeValue());
-		assertNotNull(anotherResult.getBody());
+        //Verify request succeed
+        assertEquals(201, anotherResult.getStatusCodeValue());
+        assertNotNull(anotherResult.getBody());
 
-		List<Contact> expectedContacts = new ArrayList<>();
-		expectedContacts.add(result.getBody());
-		expectedContacts.add(anotherResult.getBody());
+        List<Contact> expectedContacts = new ArrayList<>();
+        expectedContacts.add(result.getBody());
+        expectedContacts.add(anotherResult.getBody());
 
-		String url = baseUrl + "?contactIds=" + result.getBody().getId() + "&contactIds=" + anotherResult.getBody().getId();
-		ResponseEntity<List<Contact>> responseEntity =
-				restTemplate.exchange(
-						url,
-						HttpMethod.GET,
-						null,
-						new ParameterizedTypeReference<List<Contact>>() {
-						}
-				);
+        String url = baseUrl + "?contactIds=" + result.getBody().getId() + "&contactIds=" + anotherResult.getBody().getId();
+        ResponseEntity<List<Contact>> responseEntity =
+                restTemplate.exchange(
+                        url,
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<List<Contact>>() {
+                        }
+                );
 
-		List<Contact> actualContacts = responseEntity.getBody();
+        List<Contact> actualContacts = responseEntity.getBody();
 
-		assertEquals(expectedContacts, actualContacts);
-	}
+        assertEquals(expectedContacts, actualContacts);
+    }
 
-	@Test
-	void shouldGetContactWhenContactExistsForGivenContactId() throws URISyntaxException, IOException {
-		final String baseUrl = LOCAL_HOST + randomServerPort + CONTACT_API_BASE_PATH;
-		URI uri = new URI(baseUrl);
+    @Test
+    void shouldGetContactWhenContactExistsForGivenContactId() throws URISyntaxException, IOException {
+        final String baseUrl = LOCAL_HOST + randomServerPort + CONTACT_API_BASE_PATH;
+        URI uri = new URI(baseUrl);
 
-		HttpHeaders headers = new HttpHeaders();
-		ContactDTO validContactDto = this.objectMapper.readValue(new File(VALID_CONTACT_DTO_JSON), ContactDTO.class);
+        HttpHeaders headers = new HttpHeaders();
+        ContactDTO validContactDto = this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_DTO_JSON), ContactDTO.class);
 
-		HttpEntity<ContactDTO> request = new HttpEntity<>(validContactDto, headers);
-		ResponseEntity<Contact> result = this.restTemplate.postForEntity(uri, request, Contact.class);
+        HttpEntity<ContactDTO> request = new HttpEntity<>(validContactDto, headers);
+        ResponseEntity<Contact> result = this.restTemplate.postForEntity(uri, request, Contact.class);
 
-		//Verify request succeed
-		assertEquals(201, result.getStatusCodeValue());
-		assertNotNull(result.getBody());
+        //Verify request succeed
+        assertEquals(201, result.getStatusCodeValue());
+        assertNotNull(result.getBody());
 
-		String url = baseUrl + result.getBody().getId();
-		ResponseEntity<Contact> responseEntity =
-				restTemplate.exchange(
-						url,
-						HttpMethod.GET,
-						null,
-						new ParameterizedTypeReference<Contact>() {
-						}
-				);
+        String url = baseUrl + result.getBody().getId();
+        ResponseEntity<Contact> responseEntity =
+                restTemplate.exchange(
+                        url,
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<Contact>() {
+                        }
+                );
 
-		Contact actualContact = responseEntity.getBody();
+        Contact actualContact = responseEntity.getBody();
 
-		assertEquals(result.getBody(), actualContact);
-	}
+        assertEquals(result.getBody(), actualContact);
+    }
 
 }
