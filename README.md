@@ -97,6 +97,6 @@ http://localhost:8080/actuator/info
 
 #### Test coverage report
 
-jacoco plugin used to make sure tests cover at-least 90% lines of source code.
+jacoco plugin used to make sure tests cover at-least 85% lines of source code.
 
 
