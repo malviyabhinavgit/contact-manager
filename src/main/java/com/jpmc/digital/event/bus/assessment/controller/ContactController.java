@@ -2,7 +2,6 @@ package com.jpmc.digital.event.bus.assessment.controller;
 
 import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
 import com.jpmc.digital.event.bus.assessment.dto.ContactResponse;
-import com.jpmc.digital.event.bus.assessment.entity.Contact;
 import com.jpmc.digital.event.bus.assessment.service.ContactService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -49,7 +48,7 @@ public class ContactController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get a Contact by its id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found Contact",
-            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Contact.class))}),
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ContactResponse.class))}),
             @ApiResponse(responseCode = "404", description = "Contact not found", content = @Content)})
     public ContactResponse getContact(@PathVariable("id") Long contactId) {
         log.info("GET request received for retrieving contactId={}", contactId);
@@ -62,7 +61,7 @@ public class ContactController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get Contacts for given list of contactIds")
     @ApiResponses(value = {@ApiResponse(content = {@Content(mediaType = "application/json",
-            array = @ArraySchema(schema = @Schema(implementation = Contact.class)))})})
+            array = @ArraySchema(schema = @Schema(implementation = ContactResponse.class)))})})
     public List<ContactResponse> getContacts(@RequestParam List<Long> contactIds) {
 
         log.info("GET request received for fetching contacts having contactIds={}", contactIds);
@@ -70,8 +69,8 @@ public class ContactController {
         if (CollectionUtils.isEmpty(contacts)) {
             log.info("No contacts found for contactIds={}", contactIds);
             return Collections.emptyList();
-        }else{
-            log.info("Contacts found for contactIds={} are {}",contactIds, contacts);
+        } else {
+            log.info("Contacts found for contactIds={} are {}", contactIds, contacts);
             return contacts;
         }
 
