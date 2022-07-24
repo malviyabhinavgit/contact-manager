@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jpmc.digital.event.bus.assessment.controller.ContactController;
 import com.jpmc.digital.event.bus.assessment.entity.Contact;
 import com.jpmc.digital.event.bus.assessment.entity.ContactDTO;
-import com.jpmc.digital.event.bus.assessment.repository.ContactRepository;
+import com.jpmc.digital.event.bus.assessment.repository.ContactRepositoryImpl;
 import com.jpmc.digital.event.bus.assessment.service.ContactService;
 import com.jpmc.digital.event.bus.assessment.service.ContactValidator;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ class ContactManagerApplicationTests {
 	private ContactValidator contactValidator;
 
 	@Autowired
-	private ContactRepository contactRepository;
+	private ContactRepositoryImpl contactRepository;
 
 	@Autowired
 	private TestRestTemplate restTemplate;

@@ -3,14 +3,13 @@ package com.jpmc.digital.event.bus.assessment.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jpmc.digital.event.bus.assessment.entity.Contact;
 import com.jpmc.digital.event.bus.assessment.entity.ContactDTO;
-import com.jpmc.digital.event.bus.assessment.repository.ContactRepository;
+import com.jpmc.digital.event.bus.assessment.repository.ContactRepositoryImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Optional;
 
 import static com.jpmc.digital.event.bus.assessment.ContactTestUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +18,7 @@ import static org.mockito.Mockito.*;
 
 class ContactServiceTest {
 
-    private final ContactRepository contactRepository = Mockito.mock(ContactRepository.class);
+    private final ContactRepositoryImpl contactRepository = Mockito.mock(ContactRepositoryImpl.class);
 
     private final ContactValidator contactValidator = new ContactValidatorImpl();
 
@@ -38,14 +37,14 @@ class ContactServiceTest {
     @Test
     void shouldGetContactWhenContactExists() throws IOException {
         Contact validContact = objectMapper.readValue(new File(VALID_CONTACT_JSON), Contact.class);
-        when(contactRepository.findById(TEST_CONTACT_ID)).thenReturn(Optional.of(validContact));
+        when(contactRepository.getContact(TEST_CONTACT_ID)).thenReturn(validContact);
         contactService = new ContactServiceImpl(contactRepository, contactValidator);
         assertEquals(validContact, contactService.getContact(TEST_CONTACT_ID));
     }
 
     @Test
     void shouldThrowContactNotFoundExceptionWhenContactDoesnotExist() {
-        when(contactRepository.findById(TEST_CONTACT_ID)).thenReturn(Optional.empty());
+        when(contactRepository.getContact(TEST_CONTACT_ID)).thenThrow(ContactNotFoundException.class);
         contactService = new ContactServiceImpl(contactRepository, contactValidator);
         assertThrows(ContactNotFoundException.class, () -> contactService.getContact(TEST_CONTACT_ID));
     }
@@ -53,7 +52,7 @@ class ContactServiceTest {
     @Test
     void shouldGetContactsWhenContactExistsForGivenContactIds() throws IOException {
         Contact validContact = objectMapper.readValue(new File(VALID_CONTACT_JSON), Contact.class);
-        when(contactRepository.findAll()).thenReturn(Collections.singletonList(validContact));
+        when(contactRepository.getContacts(Collections.singletonList(TEST_CONTACT_ID))).thenReturn(Collections.singletonList(validContact));
         contactService = new ContactServiceImpl(contactRepository, contactValidator);
         assertEquals(Collections.singletonList(validContact), contactService.getContacts(Collections.singletonList(TEST_CONTACT_ID)));
     }

@@ -1,6 +1,7 @@
 package com.jpmc.digital.event.bus.assessment.config;
 
-import com.jpmc.digital.event.bus.assessment.repository.ContactRepository;
+import com.jpmc.digital.event.bus.assessment.repository.ContactRepositoryImpl;
+import com.jpmc.digital.event.bus.assessment.repository.jpa.ContactRepositoryJpa;
 import com.jpmc.digital.event.bus.assessment.service.ContactService;
 import com.jpmc.digital.event.bus.assessment.service.ContactServiceImpl;
 import com.jpmc.digital.event.bus.assessment.service.ContactValidator;
@@ -13,7 +14,12 @@ import org.springframework.context.annotation.Configuration;
 public class ContactConfig {
 
     @Autowired
-    public ContactRepository contactRepository;
+    public ContactRepositoryJpa contactRepositoryJpa;
+
+    @Bean
+    public ContactRepositoryImpl contactRepository(ContactRepositoryJpa contactRepositoryJpa) {
+        return new ContactRepositoryImpl(contactRepositoryJpa);
+    }
 
 
     @Bean
@@ -22,7 +28,7 @@ public class ContactConfig {
     }
 
     @Bean
-    public ContactService contactService(ContactRepository contactRepository, ContactValidator contactValidator) {
+    public ContactService contactService(ContactRepositoryImpl contactRepository, ContactValidator contactValidator) {
         return new ContactServiceImpl(contactRepository, contactValidator);
     }
 
