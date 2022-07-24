@@ -70,7 +70,7 @@ public class ContactController {
             log.info("No contacts found for contactIds={}", contactIds);
             return Collections.emptyList();
         }else{
-            log.info("Contacts found for contactIds={}", contacts);
+            log.info("Contacts found for contactIds={} are {}",contactIds, contacts);
             return contacts;
         }
 

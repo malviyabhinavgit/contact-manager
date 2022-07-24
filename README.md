@@ -23,7 +23,7 @@ Run ContactManagerApplication.java  with VM options  -Dspring.profiles.active=lo
 * Exposes POST API to create contact. Swagger link: http://localhost:8080/swagger-ui/index.html#/contact-controller/createContact 
 * Exposes GET API to get Contact for a given contactId. Swagger Link: http://localhost:8080/swagger-ui/index.html#/contact-controller/getContact
 * Exposes GET API to get Contacts for a bunch of contactIds. Swagger Link: http://localhost:8080/swagger-ui/index.html#/contact-controller/getContacts
-* All above-mentioned URLs will work only when the application is running using the steps mentioned above.
+* All mentioned URLs will work only when the application is running using the steps mentioned above.
 
 ##
 ##Local Swagger Endpoint URL
@@ -85,8 +85,11 @@ curl -X 'GET' \
   'http://localhost:8080/api/contact/?contactIds=1&contactIds=2&contactIds=3' \
   -H 'accept: application/json'
 ````
+##### actuator endpoints
+http://localhost:8080/actuator/health
+http://localhost:8080/actuator/info
 
-####Test coverage report
+#### Test coverage report
 
 jacoco plugin used to make sure tests cover at-least 90% lines of source code.
 

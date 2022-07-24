@@ -3,6 +3,7 @@ package com.jpmc.digital.event.bus.assessment.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jpmc.digital.event.bus.assessment.entity.Contact;
 import com.jpmc.digital.event.bus.assessment.entity.ContactDTO;
+import com.jpmc.digital.event.bus.assessment.repository.jpa.ContactRepositoryJpa;
 import com.jpmc.digital.event.bus.assessment.service.ContactNotFoundException;
 import com.jpmc.digital.event.bus.assessment.service.ContactService;
 import com.jpmc.digital.event.bus.assessment.service.MandatoryFieldNotPresentException;
@@ -34,6 +35,9 @@ class ContactControllerTest {
 
     @MockBean
     private ContactService contactService;
+
+    @MockBean
+    private ContactRepositoryJpa contactRepositoryJpa;
 
     @Autowired
     private ObjectMapper objectMapper;

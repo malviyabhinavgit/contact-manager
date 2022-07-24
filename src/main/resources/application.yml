@@ -7,6 +7,7 @@ info:
   version: 1.0.0
 
 #Exposes Spring actuator endpoints
+
 management:
   health:
     diskspace:
@@ -18,6 +19,8 @@ management:
       show-details: NEVER
   endpoints:
     web:
-      base-path: /
+      base-path: /actuator/
       exposure:
-        include: "*"
+        include:
+          - health
+          - info
