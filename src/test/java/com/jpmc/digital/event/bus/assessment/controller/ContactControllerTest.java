@@ -1,8 +1,8 @@
 package com.jpmc.digital.event.bus.assessment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jpmc.digital.event.bus.assessment.entity.Contact;
-import com.jpmc.digital.event.bus.assessment.entity.ContactDTO;
+import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
+import com.jpmc.digital.event.bus.assessment.dto.ContactResponse;
 import com.jpmc.digital.event.bus.assessment.repository.jpa.ContactRepositoryJpa;
 import com.jpmc.digital.event.bus.assessment.service.ContactNotFoundException;
 import com.jpmc.digital.event.bus.assessment.service.ContactService;
@@ -49,33 +49,33 @@ class ContactControllerTest {
     }
 
     @Test
-    void shouldCreateContactWhenCalledWithValidContactDto() throws Exception {
-        ContactDTO validContactDto = this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_DTO_JSON), ContactDTO.class);
-        when(contactService.save(validContactDto))
-                .thenReturn(this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class));
+    void shouldCreateContactWhenCalledWithValidContactReq() throws Exception {
+        ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_REQ_JSON), ContactRequest.class);
+        when(contactService.save(contactRequest))
+                .thenReturn(this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), ContactResponse.class));
 
 
         this.mockMvc.perform(post(CONTACT_API_BASE_PATH).contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(validContactDto)))
+                        .content(this.objectMapper.writeValueAsString(contactRequest)))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    void shouldGiveBadRequestWhenCalledWithInValidContactDto() throws Exception {
-        ContactDTO invalidContactDto = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_DTO_WITHOUT_FIRST_NAME_JSON), ContactDTO.class);
-        when(contactService.save(invalidContactDto))
+    void shouldGiveBadRequestWhenCalledWithInValidContactReq() throws Exception {
+        ContactRequest invalidContactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_FIRST_NAME_JSON), ContactRequest.class);
+        when(contactService.save(invalidContactRequest))
                 .thenThrow(new MandatoryFieldNotPresentException("firstName"));
 
 
         this.mockMvc.perform(post(CONTACT_API_BASE_PATH).contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(invalidContactDto)))
+                        .content(this.objectMapper.writeValueAsString(invalidContactRequest)))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void shouldGetContactWhenContactExists() throws Exception {
-        Contact validContact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
-        when(contactService.getContact(TEST_CONTACT_ID)).thenReturn(validContact);
+        ContactResponse contactResponse = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), ContactResponse.class);
+        when(contactService.getContact(TEST_CONTACT_ID)).thenReturn(contactResponse);
 
         this.mockMvc.perform(get(CONTACT_API_BASE_PATH + "{id}", TEST_CONTACT_ID))
                 .andExpect(status().isOk());
@@ -92,12 +92,12 @@ class ContactControllerTest {
 
     @Test
     void shouldGetContactsWhenContactsExistsForGivenContactIds() throws Exception {
-        Contact validContact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
+        ContactResponse contactResponse = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), ContactResponse.class);
         List<Long> contactIds = new ArrayList<>();
         contactIds.add(TEST_CONTACT_ID);
         contactIds.add(TEST_CONTACT_ID_1);
 
-        when(contactService.getContacts(contactIds)).thenReturn(Collections.singletonList(validContact));
+        when(contactService.getContacts(contactIds)).thenReturn(Collections.singletonList(contactResponse));
 
         this.mockMvc.perform(get(CONTACT_API_BASE_PATH).param("contactIds", "123, 234"))
                 .andExpect(status().isOk());

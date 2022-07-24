@@ -1,8 +1,9 @@
 package com.jpmc.digital.event.bus.assessment.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
+import com.jpmc.digital.event.bus.assessment.dto.ContactResponse;
 import com.jpmc.digital.event.bus.assessment.entity.Contact;
-import com.jpmc.digital.event.bus.assessment.entity.ContactDTO;
 import com.jpmc.digital.event.bus.assessment.repository.ContactRepositoryImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -27,19 +28,22 @@ class ContactServiceTest {
     private ContactService contactService;
 
     @Test
-    void shouldCreateContactWhenCalledWithValidContactDto() throws IOException {
+    void shouldCreateContactWhenCalledWithValidContactReq() throws IOException {
+        Contact validContact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
+        ContactResponse contactResponse = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), ContactResponse.class);
+        when(contactRepository.save(any(Contact.class))).thenReturn(validContact);
         contactService = new ContactServiceImpl(contactRepository, contactValidator);
-        ContactDTO validContactDTO = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_DTO_JSON), ContactDTO.class);
-        contactService.save(validContactDTO);
-        verify(contactRepository, times(1)).save(any());
+        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_REQ_JSON), ContactRequest.class);
+        assertEquals(contactResponse, contactService.save(contactRequest));
     }
 
     @Test
     void shouldGetContactWhenContactExists() throws IOException {
+        ContactResponse contactResponse = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), ContactResponse.class);
         Contact validContact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
         when(contactRepository.getContact(TEST_CONTACT_ID)).thenReturn(validContact);
         contactService = new ContactServiceImpl(contactRepository, contactValidator);
-        assertEquals(validContact, contactService.getContact(TEST_CONTACT_ID));
+        assertEquals(contactResponse, contactService.getContact(TEST_CONTACT_ID));
     }
 
     @Test
@@ -51,17 +55,18 @@ class ContactServiceTest {
 
     @Test
     void shouldGetContactsWhenContactExistsForGivenContactIds() throws IOException {
-        Contact validContact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
-        when(contactRepository.getContacts(Collections.singletonList(TEST_CONTACT_ID))).thenReturn(Collections.singletonList(validContact));
+        ContactResponse contactResponse = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), ContactResponse.class);
+        Contact contact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
+        when(contactRepository.getContacts(Collections.singletonList(TEST_CONTACT_ID))).thenReturn(Collections.singletonList(contact));
         contactService = new ContactServiceImpl(contactRepository, contactValidator);
-        assertEquals(Collections.singletonList(validContact), contactService.getContacts(Collections.singletonList(TEST_CONTACT_ID)));
+        assertEquals(Collections.singletonList(contactResponse), contactService.getContacts(Collections.singletonList(TEST_CONTACT_ID)));
     }
 
     @Test
     void shouldThrowMandatoryFieldNotPresentExceptionWhenCalledWithInvalidContactDto() throws IOException {
         contactService = new ContactServiceImpl(contactRepository, contactValidator);
-        ContactDTO invalidContactDTO = objectMapper.readValue(ResourceUtils.getFile(CONTACT_DTO_WITHOUT_FIRST_NAME_JSON), ContactDTO.class);
-        assertThrows(MandatoryFieldNotPresentException.class, () -> contactService.save(invalidContactDTO));
+        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_FIRST_NAME_JSON), ContactRequest.class);
+        assertThrows(MandatoryFieldNotPresentException.class, () -> contactService.save(contactRequest));
     }
 
 }

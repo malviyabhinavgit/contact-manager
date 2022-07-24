@@ -22,7 +22,7 @@ public class ContactRepositoryImpl implements ContractRepository {
 
     @Override
     public Contact getContact(Long contactId) {
-        return contactRepositoryJpa.findById(contactId).orElseThrow(ContactNotFoundException::new);
+        return  contactRepositoryJpa.findById(contactId).orElseThrow(ContactNotFoundException::new);
     }
 
     @Override
