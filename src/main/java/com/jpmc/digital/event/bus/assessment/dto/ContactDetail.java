@@ -42,7 +42,7 @@ public class ContactDetail {
     @Override
     public String toString() {
         return "ContactDetail{" +
-                ", mobileNumber=" + mobileNumber +
+                "mobileNumber=" + mobileNumber +
                 ", address=" + address +
                 '}';
     }

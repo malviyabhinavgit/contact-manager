@@ -66,7 +66,7 @@ public class Address {
     @Override
     public String toString() {
         return "Address{" +
-                ", firstLineOfAddress='" + firstLineOfAddress + '\'' +
+                "firstLineOfAddress='" + firstLineOfAddress + '\'' +
                 ", lastLineOfAddress='" + lastLineOfAddress + '\'' +
                 ", city='" + city + '\'' +
                 ", postcode='" + postcode + '\'' +
