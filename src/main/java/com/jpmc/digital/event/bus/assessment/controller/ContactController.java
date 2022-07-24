@@ -3,7 +3,10 @@ package com.jpmc.digital.event.bus.assessment.controller;
 import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
 import com.jpmc.digital.event.bus.assessment.dto.ContactResponse;
 import com.jpmc.digital.event.bus.assessment.service.ContactService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,7 +25,9 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/contact")
+@RequestMapping("/api/v1/contact")
+@OpenAPIDefinition(info = @Info(title = "Contact-Manager", description = "Api to store/Retrieve Contacts over HTTP",
+        version = "v1", license = @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0")))
 public class ContactController {
 
     private final Logger log = LoggerFactory.getLogger(ContactController.class);
@@ -36,6 +41,8 @@ public class ContactController {
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Saves Contact.")
+    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Contact Created",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ContactResponse.class)))})
     public ContactResponse createContact(@NotNull @Valid @RequestBody ContactRequest contactRequest) {
         log.info("POST request received for creating contact={}", contactRequest);
         ContactResponse contactResponse = contactService.save(contactRequest);

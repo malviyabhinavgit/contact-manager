@@ -53,7 +53,7 @@ POST
 ##### Sample curl command for creating contact
 ````shell script
 curl -X 'POST' \
-  'http://localhost:8080/api/contact/' \
+  'http://localhost:8080/api/v1/contact/' \
   -H 'accept: */*' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -78,7 +78,7 @@ curl -X 'POST' \
 returns 404 for any contactId that is not created.
 ````shell script
 curl -X 'GET' \
-  'http://localhost:8080/api/contact/1' \
+  'http://localhost:8080/api/v1/contact/1' \
   -H 'accept: application/json'
 
 ````
@@ -87,7 +87,7 @@ curl -X 'GET' \
 This will return an empty response if no contact found for passed contactIds
 ````shell script
 curl -X 'GET' \
-  'http://localhost:8080/api/contact/?contactIds=1&contactIds=2&contactIds=3' \
+  'http://localhost:8080/api/v1/contact/?contactIds=1&contactIds=2&contactIds=3' \
   -H 'accept: application/json'
 ````
 ##### Actuator Endpoints
