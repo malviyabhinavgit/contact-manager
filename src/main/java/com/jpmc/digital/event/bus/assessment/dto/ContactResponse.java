@@ -1,14 +1,25 @@
-package com.jpmc.digital.event.bus.assessment.entity;
+package com.jpmc.digital.event.bus.assessment.dto;
+
 
 import java.util.Objects;
 
-public class ContactDTO {
+public class ContactResponse {
+
+    private long id;
 
     private String firstName;
 
     private String lastName;
 
     private ContactDetail contactDetail;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -38,21 +49,23 @@ public class ContactDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ContactDTO that = (ContactDTO) o;
-        return Objects.equals(firstName, that.firstName) &&
-                Objects.equals(lastName, that.lastName) &&
-                Objects.equals(contactDetail, that.contactDetail);
+        ContactResponse contactResponse = (ContactResponse) o;
+        return id == contactResponse.id &&
+                Objects.equals(firstName, contactResponse.firstName) &&
+                Objects.equals(lastName, contactResponse.lastName) &&
+                Objects.equals(contactDetail, contactResponse.contactDetail);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, contactDetail);
+        return Objects.hash(id, firstName, lastName, contactDetail);
     }
 
     @Override
     public String toString() {
-        return "ContactDTO{" +
-                "firstName='" + firstName + '\'' +
+        return "Contact{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", contactDetail=" + contactDetail +
                 '}';

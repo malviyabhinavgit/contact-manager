@@ -1,7 +1,7 @@
 package com.jpmc.digital.event.bus.assessment.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jpmc.digital.event.bus.assessment.entity.ContactDTO;
+import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
 
@@ -20,29 +20,29 @@ class ContactValidatorTest {
     @Test
     void shouldThrowMandatoryFieldNotPresentExceptionWhenFirstNameNotPresent() throws IOException {
 
-        ContactDTO invalidContactDTO = objectMapper.readValue(ResourceUtils.getFile(CONTACT_DTO_WITHOUT_FIRST_NAME_JSON), ContactDTO.class);
-        assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(invalidContactDTO));
+        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_FIRST_NAME_JSON), ContactRequest.class);
+        assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
     }
 
     @Test
     void shouldThrowMandatoryFieldNotPresentExceptionWhenMobileNumberNotPresent() throws IOException {
 
-        ContactDTO invalidContactDTO = objectMapper.readValue(ResourceUtils.getFile(CONTACT_DTO_WITHOUT_MOBILE_JSON), ContactDTO.class);
-        assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(invalidContactDTO));
+        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_MOBILE_JSON), ContactRequest.class);
+        assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
     }
 
     @Test
     void shouldThrowMandatoryFieldNotPresentExceptionWhenAddressFirstLineNotPresent() throws IOException {
 
-        ContactDTO invalidContactDTO = objectMapper.readValue(ResourceUtils.getFile(CONTACT_DTO_WITHOUT_ADD_FIRST_LINE), ContactDTO.class);
-        assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(invalidContactDTO));
+        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_ADD_FIRST_LINE), ContactRequest.class);
+        assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
     }
 
     @Test
     void shouldThrowMandatoryFieldNotPresentExceptionWhenPostCodeNotPresent() throws IOException {
 
-        ContactDTO invalidContactDTO = objectMapper.readValue(ResourceUtils.getFile(CONTACT_DTO_WITHOUT_POSTCODE), ContactDTO.class);
-        assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(invalidContactDTO));
+        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_POSTCODE), ContactRequest.class);
+        assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
     }
 
 }

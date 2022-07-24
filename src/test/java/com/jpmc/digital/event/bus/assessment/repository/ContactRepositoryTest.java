@@ -23,7 +23,7 @@ class ContactRepositoryTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    void shouldCreateContactWhenSavedWithValidContactDto() throws IOException {
+    void shouldCreateContactWhenSavedWithValidContactReq() throws IOException {
         Contact contact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
         when(contactRepositoryJpa.save(contact)).thenReturn(contact);
         assertEquals(contact, new ContactRepositoryImpl(contactRepositoryJpa).save(contact));

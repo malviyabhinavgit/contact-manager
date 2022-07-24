@@ -1,7 +1,8 @@
 package com.jpmc.digital.event.bus.assessment.controller;
 
+import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
+import com.jpmc.digital.event.bus.assessment.dto.ContactResponse;
 import com.jpmc.digital.event.bus.assessment.entity.Contact;
-import com.jpmc.digital.event.bus.assessment.entity.ContactDTO;
 import com.jpmc.digital.event.bus.assessment.service.ContactService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -36,11 +37,11 @@ public class ContactController {
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Saves Contact.")
-    public Contact createContact(@NotNull @Valid @RequestBody ContactDTO contactdto) {
-        log.info("POST request received for creating contact={}", contactdto);
-        Contact contact = contactService.save(contactdto);
-        log.info("Successfully created contact={}", contact);
-        return contact;
+    public ContactResponse createContact(@NotNull @Valid @RequestBody ContactRequest contactRequest) {
+        log.info("POST request received for creating contact={}", contactRequest);
+        ContactResponse contactResponse = contactService.save(contactRequest);
+        log.info("Successfully created contact={}", contactResponse);
+        return contactResponse;
     }
 
 
@@ -50,11 +51,11 @@ public class ContactController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Found Contact",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Contact.class))}),
             @ApiResponse(responseCode = "404", description = "Contact not found", content = @Content)})
-    public Contact getContact(@PathVariable("id") Long contactId) {
+    public ContactResponse getContact(@PathVariable("id") Long contactId) {
         log.info("GET request received for retrieving contactId={}", contactId);
-        Contact contact = contactService.getContact(contactId);
-        log.info("Successfully fetched contact={}", contact);
-        return contact;
+        ContactResponse contactResponse = contactService.getContact(contactId);
+        log.info("Successfully fetched contact={}", contactResponse);
+        return contactResponse;
     }
 
     @GetMapping("/")
@@ -62,10 +63,10 @@ public class ContactController {
     @Operation(summary = "Get Contacts for given list of contactIds")
     @ApiResponses(value = {@ApiResponse(content = {@Content(mediaType = "application/json",
             array = @ArraySchema(schema = @Schema(implementation = Contact.class)))})})
-    public List<Contact> getContacts(@RequestParam List<Long> contactIds) {
+    public List<ContactResponse> getContacts(@RequestParam List<Long> contactIds) {
 
         log.info("GET request received for fetching contacts having contactIds={}", contactIds);
-        List<Contact> contacts = contactService.getContacts(contactIds);
+        List<ContactResponse> contacts = contactService.getContacts(contactIds);
         if (CollectionUtils.isEmpty(contacts)) {
             log.info("No contacts found for contactIds={}", contactIds);
             return Collections.emptyList();

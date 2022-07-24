@@ -1,24 +1,13 @@
-package com.jpmc.digital.event.bus.assessment.entity;
+package com.jpmc.digital.event.bus.assessment.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import java.util.Objects;
 
 
-@Entity
 public class Address {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
     private String firstLineOfAddress;
     private String lastLineOfAddress;
-
     private String city;
     private String postcode;
-
     private String country;
 
     public String getFirstLineOfAddress() {
@@ -62,9 +51,21 @@ public class Address {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return Objects.equals(firstLineOfAddress, address.firstLineOfAddress) && Objects.equals(lastLineOfAddress, address.lastLineOfAddress) && Objects.equals(city, address.city) && Objects.equals(postcode, address.postcode) && Objects.equals(country, address.country);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstLineOfAddress, lastLineOfAddress, city, postcode, country);
+    }
+
+    @Override
     public String toString() {
         return "Address{" +
-                "id=" + id +
                 ", firstLineOfAddress='" + firstLineOfAddress + '\'' +
                 ", lastLineOfAddress='" + lastLineOfAddress + '\'' +
                 ", city='" + city + '\'' +
