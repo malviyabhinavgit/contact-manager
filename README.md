@@ -18,7 +18,7 @@ Run ContactManagerApplication.java
 VM options  -Dspring.profiles.active=local
  
 
-####API Details(all URLS are mentioned assuming you run application locally)
+#### API Details(all URLS are mentioned assuming you run application locally)
 
 * Exposes simple-to-use swagger url to get started with the APIs. http://localhost:8080/swagger-ui/index.html.
 * Exposes POST API to create contact. Swagger link: http://localhost:8080/swagger-ui/index.html#/contact-controller/createContact 
