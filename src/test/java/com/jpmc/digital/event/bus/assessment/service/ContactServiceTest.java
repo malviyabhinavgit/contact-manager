@@ -63,7 +63,7 @@ class ContactServiceTest {
     }
 
     @Test
-    void shouldThrowMandatoryFieldNotPresentExceptionWhenCalledWithInvalidContactDto() throws IOException {
+    void shouldThrowMandatoryFieldNotPresentExceptionWhenCalledWithInvalidContactReq() throws IOException {
         contactService = new ContactServiceImpl(contactRepository, contactValidator);
         ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_FIRST_NAME_JSON), ContactRequest.class);
         assertThrows(MandatoryFieldNotPresentException.class, () -> contactService.save(contactRequest));

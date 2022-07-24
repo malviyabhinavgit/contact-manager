@@ -64,7 +64,7 @@ class ContactManagerApplicationTests {
     }
 
     @Test
-    void shouldCreateContactWhenPostedRightContactDto() throws URISyntaxException, IOException {
+    void shouldCreateContactWhenPostedRightContactReq() throws URISyntaxException, IOException {
         final String baseUrl = LOCAL_HOST + randomServerPort + CONTACT_API_BASE_PATH;
         URI uri = new URI(baseUrl);
 
@@ -83,7 +83,7 @@ class ContactManagerApplicationTests {
     }
 
     @Test
-    void shouldGetBadRequestWhenPostedInvalidContactDto() throws URISyntaxException, IOException {
+    void shouldGetBadRequestWhenPostedInvalidContactReq() throws URISyntaxException, IOException {
         final String baseUrl = LOCAL_HOST + randomServerPort + CONTACT_API_BASE_PATH;
         URI uri = new URI(baseUrl);
 

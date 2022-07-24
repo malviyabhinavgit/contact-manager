@@ -53,7 +53,7 @@ public class ContactRequest {
     @Override
     public String toString() {
         return "Contact{" +
-                ", firstName='" + firstName + '\'' +
+                "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", contactDetail=" + contactDetail +
                 '}';
