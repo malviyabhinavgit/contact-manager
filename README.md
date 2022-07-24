@@ -87,6 +87,7 @@ curl -X 'GET' \
 ````
 ##### actuator endpoints
 http://localhost:8080/actuator/health
+
 http://localhost:8080/actuator/info
 
 #### Test coverage report
