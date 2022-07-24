@@ -15,9 +15,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,31 +50,31 @@ class ContactControllerTest {
 
     @Test
     void shouldCreateContactWhenCalledWithValidContactDto() throws Exception {
-        ContactDTO validContactDto = this.objectMapper.readValue(new File(VALID_CONTACT_DTO_JSON), ContactDTO.class);
+        ContactDTO validContactDto = this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_DTO_JSON), ContactDTO.class);
         when(contactService.save(validContactDto))
-                .thenReturn(this.objectMapper.readValue(new File(VALID_CONTACT_JSON), Contact.class));
+                .thenReturn(this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class));
 
 
         this.mockMvc.perform(post(CONTACT_API_BASE_PATH).contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(validContactDto)))
+                        .content(this.objectMapper.writeValueAsString(validContactDto)))
                 .andExpect(status().isCreated());
     }
 
     @Test
     void shouldGiveBadRequestWhenCalledWithInValidContactDto() throws Exception {
-        ContactDTO invalidContactDto = this.objectMapper.readValue(new File(CONTACT_DTO_WITHOUT_FIRST_NAME_JSON), ContactDTO.class);
+        ContactDTO invalidContactDto = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_DTO_WITHOUT_FIRST_NAME_JSON), ContactDTO.class);
         when(contactService.save(invalidContactDto))
                 .thenThrow(new MandatoryFieldNotPresentException("firstName"));
 
 
         this.mockMvc.perform(post(CONTACT_API_BASE_PATH).contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(invalidContactDto)))
+                        .content(this.objectMapper.writeValueAsString(invalidContactDto)))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void shouldGetContactWhenContactExists() throws Exception {
-        Contact validContact = objectMapper.readValue(new File(VALID_CONTACT_JSON), Contact.class);
+        Contact validContact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
         when(contactService.getContact(TEST_CONTACT_ID)).thenReturn(validContact);
 
         this.mockMvc.perform(get(CONTACT_API_BASE_PATH + "{id}", TEST_CONTACT_ID))
@@ -92,7 +92,7 @@ class ContactControllerTest {
 
     @Test
     void shouldGetContactsWhenContactsExistsForGivenContactIds() throws Exception {
-        Contact validContact = objectMapper.readValue(new File(VALID_CONTACT_JSON), Contact.class);
+        Contact validContact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
         List<Long> contactIds = new ArrayList<>();
         contactIds.add(TEST_CONTACT_ID);
         contactIds.add(TEST_CONTACT_ID_1);

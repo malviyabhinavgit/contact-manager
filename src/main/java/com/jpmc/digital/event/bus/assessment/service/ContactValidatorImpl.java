@@ -14,7 +14,9 @@ public class ContactValidatorImpl implements ContactValidator {
         validate("lastName", contactDTO.getLastName());
         validate("firstLineOfAddress", contactDTO.getContactDetail().getAddress().getFirstLineOfAddress());
         validate("postCode", contactDTO.getContactDetail().getAddress().getPostcode());
-        validate("phoneNumbers", contactDTO.getContactDetail().getMobileNumber());
+        validate("city", contactDTO.getContactDetail().getAddress().getPostcode());
+        validate("country", contactDTO.getContactDetail().getAddress().getPostcode());
+        validate("mobileNumber", contactDTO.getContactDetail().getMobileNumber());
 
     }
 
