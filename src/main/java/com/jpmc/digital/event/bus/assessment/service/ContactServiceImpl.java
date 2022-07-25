@@ -59,20 +59,43 @@ public class ContactServiceImpl implements ContactService {
 
     private ContactResponse contactResponse(Contact contact) {
 
+        if(contact ==null){
+            throw new ContactNotFoundException();
+        }
+
+        com.jpmc.digital.event.bus.assessment.entity.ContactDetail contactDetail = contact.getContactDetail();
+        /*checks are in place to stop populating contact without contactDetail. This is an additional check to avoid NPE
+        in case someone inserts bad data in database. */
+        if(contactDetail ==null){
+            contactDetail = new com.jpmc.digital.event.bus.assessment.entity.ContactDetail();
+        }
+
+        com.jpmc.digital.event.bus.assessment.entity.Address address = contactDetail.getAddress();
+        /*checks are in place to stop populating contact without Address. This is an additional check to avoid NPE
+        in case someone inserts bad data in database. */
+
+        if(address ==null){
+            address = new com.jpmc.digital.event.bus.assessment.entity.Address();
+        }
+
         ContactResponse contactResponse = new ContactResponse();
         contactResponse.setId(contact.getId());
         contactResponse.setFirstName(contact.getFirstName());
         contactResponse.setLastName(contact.getLastName());
-        ContactDetail contactDetail = new ContactDetail();
-        Address address = new Address();
-        address.setFirstLineOfAddress(contact.getContactDetail().getAddress().getFirstLineOfAddress());
-        address.setLastLineOfAddress(contact.getContactDetail().getAddress().getLastLineOfAddress());
-        address.setCity(contact.getContactDetail().getAddress().getCity());
-        address.setCountry(contact.getContactDetail().getAddress().getCountry());
-        address.setPostcode(contact.getContactDetail().getAddress().getPostcode());
-        contactDetail.setAddress(address);
-        contactDetail.setMobileNumber(Collections.unmodifiableList(contact.getContactDetail().getMobileNumber()));
-        contactResponse.setContactDetail(contactDetail);
+
+        ContactDetail contactDetailResp = new ContactDetail();
+        Address addressResp = new Address();
+
+        addressResp.setFirstLineOfAddress(address.getFirstLineOfAddress());
+        addressResp.setLastLineOfAddress(address.getLastLineOfAddress());
+        addressResp.setCity(address.getCity());
+        addressResp.setCountry(address.getCountry());
+        addressResp.setPostcode(address.getPostcode());
+
+        contactDetailResp.setAddress(addressResp);
+        contactDetailResp.setMobileNumber(Collections.unmodifiableList(contactDetail.getMobileNumber()));
+
+        contactResponse.setContactDetail(contactDetailResp);
         return contactResponse;
     }
 }

@@ -6,6 +6,8 @@ public class ContactTestUtil {
     public static final String CONTACT_REQ_WITHOUT_MOBILE_JSON = "classpath:contactReqWithoutMobileNumber.json";
     public static final String CONTACT_REQ_WITHOUT_ADD_FIRST_LINE = "classpath:contactReqWithoutFirstLineOfAddress.json";
     public static final String CONTACT_REQ_WITHOUT_POSTCODE = "classpath:contactReqWithoutPostCode.json";
+    public static final String CONTACT_REQ_WITHOUT_ADDRESS = "classpath:contactReqWithoutAddress.json";
+    public static final String CONTACT_REQ_WITHOUT_CONTACT_DETAIL = "classpath:contactReqWithoutContactDetail.json";
     public static final String VALID_CONTACT_JSON = "classpath:contact.json";
     public static final String LOCAL_HOST = "http://localhost:";
     public static final String CONTACT_API_BASE_PATH = "/api/v1/contact/";

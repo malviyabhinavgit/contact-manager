@@ -15,7 +15,8 @@ import java.util.Collections;
 import static com.jpmc.digital.event.bus.assessment.ContactTestUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 class ContactServiceTest {
 
