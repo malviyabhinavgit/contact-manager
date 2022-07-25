@@ -1,7 +1,7 @@
 package com.jpmc.digital.event.bus.assessment.service;
 
-import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
+import com.jpmc.digital.event.bus.assessment.dto.ContactRequestResponse;
 
 public interface ContactValidator {
-    void validate(ContactRequest contactRequest);
+    void validate(ContactRequestResponse contactRequest);
 }

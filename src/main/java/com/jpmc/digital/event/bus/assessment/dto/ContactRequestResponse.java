@@ -3,7 +3,7 @@ package com.jpmc.digital.event.bus.assessment.dto;
 
 import java.util.Objects;
 
-public class ContactResponse {
+public class ContactRequestResponse {
 
     private long id;
 
@@ -49,7 +49,7 @@ public class ContactResponse {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ContactResponse contactResponse = (ContactResponse) o;
+        ContactRequestResponse contactResponse = (ContactRequestResponse) o;
         return id == contactResponse.id &&
                 Objects.equals(firstName, contactResponse.firstName) &&
                 Objects.equals(lastName, contactResponse.lastName) &&

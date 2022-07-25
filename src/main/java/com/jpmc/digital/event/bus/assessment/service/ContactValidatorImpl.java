@@ -2,14 +2,14 @@ package com.jpmc.digital.event.bus.assessment.service;
 
 import com.jpmc.digital.event.bus.assessment.dto.Address;
 import com.jpmc.digital.event.bus.assessment.dto.ContactDetail;
-import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
+import com.jpmc.digital.event.bus.assessment.dto.ContactRequestResponse;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.util.CollectionUtils;
 
 public class ContactValidatorImpl implements ContactValidator {
 
     @Override
-    public void validate(ContactRequest contactRequest) {
+    public void validate(ContactRequestResponse contactRequest) {
         validate("firstName", contactRequest.getFirstName());
         validate("lastName", contactRequest.getLastName());
 

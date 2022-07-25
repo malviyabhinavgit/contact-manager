@@ -1,13 +1,12 @@
 package com.jpmc.digital.event.bus.assessment.service;
 
-import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
-import com.jpmc.digital.event.bus.assessment.dto.ContactResponse;
+import com.jpmc.digital.event.bus.assessment.dto.ContactRequestResponse;
 
 import java.util.List;
 
 public interface ContactService {
-    ContactResponse save (ContactRequest contactRequest);
-    ContactResponse getContact(Long contactId);
-    List<ContactResponse> getContacts(List<Long> ids);
+    ContactRequestResponse save (ContactRequestResponse contactRequest);
+    ContactRequestResponse getContact(Long contactId);
+    List<ContactRequestResponse> getContacts(List<Long> ids);
 
 }

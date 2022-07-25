@@ -1,8 +1,7 @@
 package com.jpmc.digital.event.bus.assessment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
-import com.jpmc.digital.event.bus.assessment.dto.ContactResponse;
+import com.jpmc.digital.event.bus.assessment.dto.ContactRequestResponse;
 import com.jpmc.digital.event.bus.assessment.repository.jpa.ContactRepositoryJpa;
 import com.jpmc.digital.event.bus.assessment.service.ContactNotFoundException;
 import com.jpmc.digital.event.bus.assessment.service.ContactService;
@@ -50,9 +49,9 @@ class ContactControllerTest {
 
     @Test
     void shouldCreateContactWhenCalledWithValidContactReq() throws Exception {
-        ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_REQ_JSON), ContactRequest.class);
+        ContactRequestResponse contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_REQ_JSON), ContactRequestResponse.class);
         when(contactService.save(contactRequest))
-                .thenReturn(this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), ContactResponse.class));
+                .thenReturn(this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), ContactRequestResponse.class));
 
 
         this.mockMvc.perform(post(CONTACT_API_BASE_PATH).contentType(MediaType.APPLICATION_JSON)
@@ -62,7 +61,7 @@ class ContactControllerTest {
 
     @Test
     void shouldGiveBadRequestWhenCalledWithInValidContactReq() throws Exception {
-        ContactRequest invalidContactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_FIRST_NAME_JSON), ContactRequest.class);
+        ContactRequestResponse invalidContactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_FIRST_NAME_JSON), ContactRequestResponse.class);
         when(contactService.save(invalidContactRequest))
                 .thenThrow(new MandatoryFieldNotPresentException("firstName"));
 
@@ -74,7 +73,7 @@ class ContactControllerTest {
 
     @Test
     void shouldGetContactWhenContactExists() throws Exception {
-        ContactResponse contactResponse = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), ContactResponse.class);
+        ContactRequestResponse contactResponse = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), ContactRequestResponse.class);
         when(contactService.getContact(TEST_CONTACT_ID)).thenReturn(contactResponse);
 
         this.mockMvc.perform(get(CONTACT_API_BASE_PATH + "{id}", TEST_CONTACT_ID))
@@ -92,7 +91,7 @@ class ContactControllerTest {
 
     @Test
     void shouldGetContactsWhenContactsExistsForGivenContactIds() throws Exception {
-        ContactResponse contactResponse = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), ContactResponse.class);
+        ContactRequestResponse contactResponse = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), ContactRequestResponse.class);
         List<Long> contactIds = new ArrayList<>();
         contactIds.add(TEST_CONTACT_ID);
         contactIds.add(TEST_CONTACT_ID_1);

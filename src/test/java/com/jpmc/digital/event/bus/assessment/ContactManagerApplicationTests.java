@@ -2,8 +2,7 @@ package com.jpmc.digital.event.bus.assessment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jpmc.digital.event.bus.assessment.controller.ContactController;
-import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
-import com.jpmc.digital.event.bus.assessment.dto.ContactResponse;
+import com.jpmc.digital.event.bus.assessment.dto.ContactRequestResponse;
 import com.jpmc.digital.event.bus.assessment.repository.ContactRepositoryImpl;
 import com.jpmc.digital.event.bus.assessment.service.ContactService;
 import com.jpmc.digital.event.bus.assessment.service.ContactValidator;
@@ -68,17 +67,17 @@ class ContactManagerApplicationTests {
         URI uri = new URI(baseUrl);
 
         HttpHeaders headers = new HttpHeaders();
-        ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_REQ_JSON), ContactRequest.class);
-        HttpEntity<ContactRequest> request = new HttpEntity<>(contactRequest, headers);
+        ContactRequestResponse contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_REQ_JSON), ContactRequestResponse.class);
+        HttpEntity<ContactRequestResponse> request = new HttpEntity<>(contactRequest, headers);
 
-        ResponseEntity<ContactResponse> result = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
+        ResponseEntity<ContactRequestResponse> result = this.restTemplate.postForEntity(uri, request, ContactRequestResponse.class);
 
         //Verify request succeed
         assertEquals(201, result.getStatusCodeValue());
         assertNotNull(result.getBody());
 
         uri = new URI(baseUrl + result.getBody().getId());
-        assertEquals(result.getBody(), this.restTemplate.getForObject(uri, ContactResponse.class));
+        assertEquals(result.getBody(), this.restTemplate.getForObject(uri, ContactRequestResponse.class));
     }
 
     @Test
@@ -87,9 +86,9 @@ class ContactManagerApplicationTests {
         URI uri = new URI(baseUrl);
 
         HttpHeaders headers = new HttpHeaders();
-        ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_FIRST_NAME_JSON), ContactRequest.class);
-        HttpEntity<ContactRequest> request = new HttpEntity<>(contactRequest, headers);
-        ResponseEntity<ContactResponse> result = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
+        ContactRequestResponse contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_FIRST_NAME_JSON), ContactRequestResponse.class);
+        HttpEntity<ContactRequestResponse> request = new HttpEntity<>(contactRequest, headers);
+        ResponseEntity<ContactRequestResponse> result = this.restTemplate.postForEntity(uri, request, ContactRequestResponse.class);
 
         //Verify request succeed
         assertEquals(400, result.getStatusCodeValue());
@@ -102,9 +101,9 @@ class ContactManagerApplicationTests {
         URI uri = new URI(baseUrl);
 
         HttpHeaders headers = new HttpHeaders();
-        ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_CONTACT_DETAIL), ContactRequest.class);
-        HttpEntity<ContactRequest> request = new HttpEntity<>(contactRequest, headers);
-        ResponseEntity<ContactResponse> result = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
+        ContactRequestResponse contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_CONTACT_DETAIL), ContactRequestResponse.class);
+        HttpEntity<ContactRequestResponse> request = new HttpEntity<>(contactRequest, headers);
+        ResponseEntity<ContactRequestResponse> result = this.restTemplate.postForEntity(uri, request, ContactRequestResponse.class);
 
         //Verify request succeed
         assertEquals(400, result.getStatusCodeValue());
@@ -117,9 +116,9 @@ class ContactManagerApplicationTests {
         URI uri = new URI(baseUrl);
 
         HttpHeaders headers = new HttpHeaders();
-        ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_ADDRESS), ContactRequest.class);
-        HttpEntity<ContactRequest> request = new HttpEntity<>(contactRequest, headers);
-        ResponseEntity<ContactResponse> result = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
+        ContactRequestResponse contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_ADDRESS), ContactRequestResponse.class);
+        HttpEntity<ContactRequestResponse> request = new HttpEntity<>(contactRequest, headers);
+        ResponseEntity<ContactRequestResponse> result = this.restTemplate.postForEntity(uri, request, ContactRequestResponse.class);
 
         //Verify request succeed
         assertEquals(201, result.getStatusCodeValue());
@@ -132,9 +131,9 @@ class ContactManagerApplicationTests {
         URI uri = new URI(baseUrl);
 
         HttpHeaders headers = new HttpHeaders();
-        ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_MOBILE_JSON), ContactRequest.class);
-        HttpEntity<ContactRequest> request = new HttpEntity<>(contactRequest, headers);
-        ResponseEntity<ContactResponse> result = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
+        ContactRequestResponse contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_MOBILE_JSON), ContactRequestResponse.class);
+        HttpEntity<ContactRequestResponse> request = new HttpEntity<>(contactRequest, headers);
+        ResponseEntity<ContactRequestResponse> result = this.restTemplate.postForEntity(uri, request, ContactRequestResponse.class);
 
         //Verify request succeed
         assertEquals(201, result.getStatusCodeValue());
@@ -147,9 +146,9 @@ class ContactManagerApplicationTests {
         URI uri = new URI(baseUrl);
 
         HttpHeaders headers = new HttpHeaders();
-        ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_MOBILE_ADDRESS_DETAIL), ContactRequest.class);
-        HttpEntity<ContactRequest> request = new HttpEntity<>(contactRequest, headers);
-        ResponseEntity<ContactResponse> result = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
+        ContactRequestResponse contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_MOBILE_ADDRESS_DETAIL), ContactRequestResponse.class);
+        HttpEntity<ContactRequestResponse> request = new HttpEntity<>(contactRequest, headers);
+        ResponseEntity<ContactRequestResponse> result = this.restTemplate.postForEntity(uri, request, ContactRequestResponse.class);
 
         //Verify request succeed
         assertEquals(400, result.getStatusCodeValue());
@@ -162,37 +161,37 @@ class ContactManagerApplicationTests {
         URI uri = new URI(baseUrl);
 
         HttpHeaders headers = new HttpHeaders();
-        ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_REQ_JSON), ContactRequest.class);
+        ContactRequestResponse contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_REQ_JSON), ContactRequestResponse.class);
 
-        HttpEntity<ContactRequest> request = new HttpEntity<>(contactRequest, headers);
-        ResponseEntity<ContactResponse> result = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
+        HttpEntity<ContactRequestResponse> request = new HttpEntity<>(contactRequest, headers);
+        ResponseEntity<ContactRequestResponse> result = this.restTemplate.postForEntity(uri, request, ContactRequestResponse.class);
 
         //Verify request succeed
         assertEquals(201, result.getStatusCodeValue());
         assertNotNull(result.getBody());
 
         request = new HttpEntity<>(contactRequest, headers);
-        ResponseEntity<ContactResponse> anotherResult = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
+        ResponseEntity<ContactRequestResponse> anotherResult = this.restTemplate.postForEntity(uri, request, ContactRequestResponse.class);
 
         //Verify request succeed
         assertEquals(201, anotherResult.getStatusCodeValue());
         assertNotNull(anotherResult.getBody());
 
-        List<ContactResponse> expectedContacts = new ArrayList<>();
+        List<ContactRequestResponse> expectedContacts = new ArrayList<>();
         expectedContacts.add(result.getBody());
         expectedContacts.add(anotherResult.getBody());
 
         String url = baseUrl + "?contactIds=" + result.getBody().getId() + "&contactIds=" + anotherResult.getBody().getId();
-        ResponseEntity<List<ContactResponse>> responseEntity =
+        ResponseEntity<List<ContactRequestResponse>> responseEntity =
                 restTemplate.exchange(
                         url,
                         HttpMethod.GET,
                         null,
-                        new ParameterizedTypeReference<List<ContactResponse>>() {
+                        new ParameterizedTypeReference<List<ContactRequestResponse>>() {
                         }
                 );
 
-        List<ContactResponse> actualContacts = responseEntity.getBody();
+        List<ContactRequestResponse> actualContacts = responseEntity.getBody();
 
         assertEquals(expectedContacts, actualContacts);
     }
@@ -203,26 +202,26 @@ class ContactManagerApplicationTests {
         URI uri = new URI(baseUrl);
 
         HttpHeaders headers = new HttpHeaders();
-        ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_REQ_JSON), ContactRequest.class);
+        ContactRequestResponse contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_REQ_JSON), ContactRequestResponse.class);
 
-        HttpEntity<ContactRequest> request = new HttpEntity<>(contactRequest, headers);
-        ResponseEntity<ContactResponse> result = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
+        HttpEntity<ContactRequestResponse> request = new HttpEntity<>(contactRequest, headers);
+        ResponseEntity<ContactRequestResponse> result = this.restTemplate.postForEntity(uri, request, ContactRequestResponse.class);
 
         //Verify request succeed
         assertEquals(201, result.getStatusCodeValue());
         assertNotNull(result.getBody());
 
         String url = baseUrl + result.getBody().getId();
-        ResponseEntity<ContactResponse> responseEntity =
+        ResponseEntity<ContactRequestResponse> responseEntity =
                 restTemplate.exchange(
                         url,
                         HttpMethod.GET,
                         null,
-                        new ParameterizedTypeReference<ContactResponse>() {
+                        new ParameterizedTypeReference<ContactRequestResponse>() {
                         }
                 );
 
-        ContactResponse actualContact = responseEntity.getBody();
+        ContactRequestResponse actualContact = responseEntity.getBody();
 
         assertEquals(result.getBody(), actualContact);
     }
