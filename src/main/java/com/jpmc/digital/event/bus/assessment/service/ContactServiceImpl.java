@@ -2,8 +2,7 @@ package com.jpmc.digital.event.bus.assessment.service;
 
 import com.jpmc.digital.event.bus.assessment.dto.Address;
 import com.jpmc.digital.event.bus.assessment.dto.ContactDetail;
-import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
-import com.jpmc.digital.event.bus.assessment.dto.ContactResponse;
+import com.jpmc.digital.event.bus.assessment.dto.ContactRequestResponse;
 import com.jpmc.digital.event.bus.assessment.entity.Contact;
 import com.jpmc.digital.event.bus.assessment.repository.ContactRepositoryImpl;
 
@@ -23,21 +22,21 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public ContactResponse save(ContactRequest contactRequest) {
+    public ContactRequestResponse save(ContactRequestResponse contactRequest) {
         return contactResponse(contactRepository.save(contact(contactRequest)));
     }
 
     @Override
-    public ContactResponse getContact(Long contactId) {
+    public ContactRequestResponse getContact(Long contactId) {
         return contactResponse(contactRepository.getContact(contactId));
     }
 
     @Override
-    public List<ContactResponse> getContacts(List<Long> ids) {
+    public List<ContactRequestResponse> getContacts(List<Long> ids) {
         return contactRepository.getContacts(ids).stream().map(this::contactResponse).collect(Collectors.toList());
     }
 
-    private Contact contact(ContactRequest contactRequest) {
+    private Contact contact(ContactRequestResponse contactRequest) {
 
         contactValidator.validate(contactRequest);
 
@@ -48,14 +47,14 @@ public class ContactServiceImpl implements ContactService {
         return contact;
     }
 
-    private void populateContactWithAvailableContactDetails(ContactRequest contactRequest, Contact contact) {
+    private void populateContactWithAvailableContactDetails(ContactRequestResponse contactRequest, Contact contact) {
         com.jpmc.digital.event.bus.assessment.entity.ContactDetail contactDetail = new com.jpmc.digital.event.bus.assessment.entity.ContactDetail();
         populateAddressForContactIfPresent(contactRequest, contactDetail);
         contactDetail.setMobileNumber(Collections.unmodifiableList(contactRequest.getContactDetail().getMobileNumber()));
         contact.setContactDetail(contactDetail);
     }
 
-    private void populateAddressForContactIfPresent(ContactRequest contactRequest, com.jpmc.digital.event.bus.assessment.entity.ContactDetail contactDetail) {
+    private void populateAddressForContactIfPresent(ContactRequestResponse contactRequest, com.jpmc.digital.event.bus.assessment.entity.ContactDetail contactDetail) {
 
         Address addressFromReq = contactRequest.getContactDetail().getAddress();
         if (addressFromReq != null) {
@@ -69,8 +68,8 @@ public class ContactServiceImpl implements ContactService {
         }
     }
 
-    private ContactResponse contactResponse(Contact contact) {
-        ContactResponse contactResponse = new ContactResponse();
+    private ContactRequestResponse contactResponse(Contact contact) {
+        ContactRequestResponse contactResponse = new ContactRequestResponse();
         contactResponse.setId(contact.getId());
         contactResponse.setFirstName(contact.getFirstName());
         contactResponse.setLastName(contact.getLastName());
@@ -78,7 +77,7 @@ public class ContactServiceImpl implements ContactService {
         return contactResponse;
     }
 
-    private void populateContactRespWithAvailableContactDetails(Contact contact, ContactResponse contactResponse) {
+    private void populateContactRespWithAvailableContactDetails(Contact contact, ContactRequestResponse contactResponse) {
         com.jpmc.digital.event.bus.assessment.entity.ContactDetail contactDetail = contact.getContactDetail();
 
         if (contactDetail != null) {
