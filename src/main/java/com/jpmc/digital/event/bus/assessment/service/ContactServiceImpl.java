@@ -24,7 +24,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public ContactResponse save(ContactRequest contactRequest) {
-        return contactResponse(contactRepository.save(initializeContactFromContactRequest(contactRequest)));
+        return contactResponse(contactRepository.save(contact(contactRequest)));
     }
 
     @Override
@@ -37,65 +37,69 @@ public class ContactServiceImpl implements ContactService {
         return contactRepository.getContacts(ids).stream().map(this::contactResponse).collect(Collectors.toList());
     }
 
-    private Contact initializeContactFromContactRequest(ContactRequest contactRequest) {
+    private Contact contact(ContactRequest contactRequest) {
 
         contactValidator.validate(contactRequest);
 
         Contact contact = new Contact();
         contact.setFirstName(contactRequest.getFirstName());
         contact.setLastName(contactRequest.getLastName());
-        com.jpmc.digital.event.bus.assessment.entity.ContactDetail contactDetail = new com.jpmc.digital.event.bus.assessment.entity.ContactDetail();
-        com.jpmc.digital.event.bus.assessment.entity.Address address = new com.jpmc.digital.event.bus.assessment.entity.Address();
-        address.setFirstLineOfAddress(contactRequest.getContactDetail().getAddress().getFirstLineOfAddress());
-        address.setLastLineOfAddress(contactRequest.getContactDetail().getAddress().getLastLineOfAddress());
-        address.setCity(contactRequest.getContactDetail().getAddress().getCity());
-        address.setCountry(contactRequest.getContactDetail().getAddress().getCountry());
-        address.setPostcode(contactRequest.getContactDetail().getAddress().getPostcode());
-        contactDetail.setAddress(address);
-        contactDetail.setMobileNumber(Collections.unmodifiableList(contactRequest.getContactDetail().getMobileNumber()));
-        contact.setContactDetail(contactDetail);
+        populateContactWithAvailableContactDetails(contactRequest, contact);
         return contact;
     }
 
+    private void populateContactWithAvailableContactDetails(ContactRequest contactRequest, Contact contact) {
+        com.jpmc.digital.event.bus.assessment.entity.ContactDetail contactDetail = new com.jpmc.digital.event.bus.assessment.entity.ContactDetail();
+        populateAddressForContactIfPresent(contactRequest, contactDetail);
+        contactDetail.setMobileNumber(Collections.unmodifiableList(contactRequest.getContactDetail().getMobileNumber()));
+        contact.setContactDetail(contactDetail);
+    }
+
+    private void populateAddressForContactIfPresent(ContactRequest contactRequest, com.jpmc.digital.event.bus.assessment.entity.ContactDetail contactDetail) {
+
+        Address addressFromReq = contactRequest.getContactDetail().getAddress();
+        if (addressFromReq != null) {
+            com.jpmc.digital.event.bus.assessment.entity.Address address = new com.jpmc.digital.event.bus.assessment.entity.Address();
+            address.setFirstLineOfAddress(addressFromReq.getFirstLineOfAddress());
+            address.setLastLineOfAddress(addressFromReq.getLastLineOfAddress());
+            address.setCity(addressFromReq.getCity());
+            address.setCountry(addressFromReq.getCountry());
+            address.setPostcode(addressFromReq.getPostcode());
+            contactDetail.setAddress(address);
+        }
+    }
+
     private ContactResponse contactResponse(Contact contact) {
-
-        if(contact ==null){
-            throw new ContactNotFoundException();
-        }
-
-        com.jpmc.digital.event.bus.assessment.entity.ContactDetail contactDetail = contact.getContactDetail();
-        /*checks are in place to stop populating contact without contactDetail. This is an additional check to avoid NPE
-        in case someone inserts bad data in database. */
-        if(contactDetail ==null){
-            contactDetail = new com.jpmc.digital.event.bus.assessment.entity.ContactDetail();
-        }
-
-        com.jpmc.digital.event.bus.assessment.entity.Address address = contactDetail.getAddress();
-        /*checks are in place to stop populating contact without Address. This is an additional check to avoid NPE
-        in case someone inserts bad data in database. */
-
-        if(address ==null){
-            address = new com.jpmc.digital.event.bus.assessment.entity.Address();
-        }
-
         ContactResponse contactResponse = new ContactResponse();
         contactResponse.setId(contact.getId());
         contactResponse.setFirstName(contact.getFirstName());
         contactResponse.setLastName(contact.getLastName());
-
-        ContactDetail contactDetailResp = new ContactDetail();
-        Address addressResp = new Address();
-
-        addressResp.setFirstLineOfAddress(address.getFirstLineOfAddress());
-        addressResp.setLastLineOfAddress(address.getLastLineOfAddress());
-        addressResp.setCity(address.getCity());
-        addressResp.setCountry(address.getCountry());
-        addressResp.setPostcode(address.getPostcode());
-
-        contactDetailResp.setAddress(addressResp);
-        contactDetailResp.setMobileNumber(Collections.unmodifiableList(contactDetail.getMobileNumber()));
-
-        contactResponse.setContactDetail(contactDetailResp);
+        populateContactRespWithAvailableContactDetails(contact, contactResponse);
         return contactResponse;
+    }
+
+    private void populateContactRespWithAvailableContactDetails(Contact contact, ContactResponse contactResponse) {
+        com.jpmc.digital.event.bus.assessment.entity.ContactDetail contactDetail = contact.getContactDetail();
+
+        if (contactDetail != null) {
+            ContactDetail contactDetailResp = new ContactDetail();
+            com.jpmc.digital.event.bus.assessment.entity.Address address = contactDetail.getAddress();
+            populateContactDetailRespWithAvailableAddressDetails(contactDetailResp, address);
+            contactDetailResp.setMobileNumber(Collections.unmodifiableList(contactDetail.getMobileNumber()));
+            contactResponse.setContactDetail(contactDetailResp);
+
+        }
+    }
+
+    private void populateContactDetailRespWithAvailableAddressDetails(ContactDetail contactDetailResp, com.jpmc.digital.event.bus.assessment.entity.Address address) {
+        if (address != null) {
+            Address addressResp = new Address();
+            addressResp.setFirstLineOfAddress(address.getFirstLineOfAddress());
+            addressResp.setLastLineOfAddress(address.getLastLineOfAddress());
+            addressResp.setCity(address.getCity());
+            addressResp.setCountry(address.getCountry());
+            addressResp.setPostcode(address.getPostcode());
+            contactDetailResp.setAddress(addressResp);
+        }
     }
 }

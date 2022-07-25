@@ -6,12 +6,13 @@ import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-
 public class ContactValidatorImpl implements ContactValidator {
 
     @Override
     public void validate(ContactRequest contactRequest) {
+        validate("firstName", contactRequest.getFirstName());
+        validate("lastName", contactRequest.getLastName());
+
         ContactDetail contactDetail = contactRequest.getContactDetail();
 
         if (contactDetail == null) {
@@ -20,16 +21,9 @@ public class ContactValidatorImpl implements ContactValidator {
 
         Address address = contactDetail.getAddress();
 
-        if (address == null) {
-            throw new MandatoryFieldNotPresentException("address");
+        if (address == null && CollectionUtils.isEmpty(contactDetail.getMobileNumber())) {
+            throw new MandatoryFieldNotPresentException("contactDetail");
         }
-        validate("firstName", contactRequest.getFirstName());
-        validate("lastName", contactRequest.getLastName());
-        validate("firstLineOfAddress", contactRequest.getContactDetail().getAddress().getFirstLineOfAddress());
-        validate("postCode", contactRequest.getContactDetail().getAddress().getPostcode());
-        validate("city", contactRequest.getContactDetail().getAddress().getPostcode());
-        validate("country", contactRequest.getContactDetail().getAddress().getPostcode());
-        validate("mobileNumber", contactRequest.getContactDetail().getMobileNumber());
 
     }
 
@@ -39,9 +33,4 @@ public class ContactValidatorImpl implements ContactValidator {
         }
     }
 
-    private void validate(String propertyName, List<String> propertyValue) {
-        if (CollectionUtils.isEmpty(propertyValue)) {
-            throw new MandatoryFieldNotPresentException(propertyName);
-        }
-    }
 }

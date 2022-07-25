@@ -122,6 +122,36 @@ class ContactManagerApplicationTests {
         ResponseEntity<ContactResponse> result = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
 
         //Verify request succeed
+        assertEquals(201, result.getStatusCodeValue());
+
+    }
+
+    @Test
+    void shouldGetBadRequestWhenPostedWithoutMobileNumber() throws URISyntaxException, IOException {
+        final String baseUrl = LOCAL_HOST + randomServerPort + CONTACT_API_BASE_PATH;
+        URI uri = new URI(baseUrl);
+
+        HttpHeaders headers = new HttpHeaders();
+        ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_MOBILE_JSON), ContactRequest.class);
+        HttpEntity<ContactRequest> request = new HttpEntity<>(contactRequest, headers);
+        ResponseEntity<ContactResponse> result = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
+
+        //Verify request succeed
+        assertEquals(201, result.getStatusCodeValue());
+
+    }
+
+    @Test
+    void shouldGetBadRequestWhenPostedWithoutAddressAndMobile() throws URISyntaxException, IOException {
+        final String baseUrl = LOCAL_HOST + randomServerPort + CONTACT_API_BASE_PATH;
+        URI uri = new URI(baseUrl);
+
+        HttpHeaders headers = new HttpHeaders();
+        ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_MOBILE_ADDRESS_DETAIL), ContactRequest.class);
+        HttpEntity<ContactRequest> request = new HttpEntity<>(contactRequest, headers);
+        ResponseEntity<ContactResponse> result = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
+
+        //Verify request succeed
         assertEquals(400, result.getStatusCodeValue());
 
     }

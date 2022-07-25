@@ -25,31 +25,12 @@ class ContactValidatorTest {
     }
 
     @Test
-    void shouldThrowMandatoryFieldNotPresentExceptionWhenMobileNumberNotPresent() throws IOException {
+    void shouldThrowMandatoryFieldNotPresentExceptionWhenLastNameNotPresent() throws IOException {
 
-        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_MOBILE_JSON), ContactRequest.class);
+        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_LAST_NAME_JSON), ContactRequest.class);
         assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
     }
 
-    @Test
-    void shouldThrowMandatoryFieldNotPresentExceptionWhenAddressFirstLineNotPresent() throws IOException {
-
-        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_ADD_FIRST_LINE), ContactRequest.class);
-        assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
-    }
-
-    @Test
-    void shouldThrowMandatoryFieldNotPresentExceptionWhenPostCodeNotPresent() throws IOException {
-
-        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_POSTCODE), ContactRequest.class);
-        assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
-    }
-
-    @Test
-    void shouldThrowMandatoryFieldNotPresentExceptionWhenAddressNotPresent() throws IOException {
-        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_ADDRESS), ContactRequest.class);
-        assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
-    }
 
     @Test
     void shouldThrowMandatoryFieldNotPresentExceptionWhenContactDetailNotPresent() throws IOException {
@@ -57,5 +38,9 @@ class ContactValidatorTest {
         assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
     }
 
-
+    @Test
+    void shouldThrowMandatoryFieldNotPresentExceptionWhenNoAddressOrMobileNumberPresent() throws IOException {
+        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_MOBILE_ADDRESS_DETAIL), ContactRequest.class);
+        assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
+    }
 }
