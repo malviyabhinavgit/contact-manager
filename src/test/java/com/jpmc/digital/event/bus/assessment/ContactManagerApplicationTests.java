@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jpmc.digital.event.bus.assessment.controller.ContactController;
 import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
 import com.jpmc.digital.event.bus.assessment.dto.ContactResponse;
-import com.jpmc.digital.event.bus.assessment.entity.Contact;
 import com.jpmc.digital.event.bus.assessment.repository.ContactRepositoryImpl;
 import com.jpmc.digital.event.bus.assessment.service.ContactService;
 import com.jpmc.digital.event.bus.assessment.service.ContactValidator;
@@ -89,6 +88,36 @@ class ContactManagerApplicationTests {
 
         HttpHeaders headers = new HttpHeaders();
         ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_FIRST_NAME_JSON), ContactRequest.class);
+        HttpEntity<ContactRequest> request = new HttpEntity<>(contactRequest, headers);
+        ResponseEntity<ContactResponse> result = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
+
+        //Verify request succeed
+        assertEquals(400, result.getStatusCodeValue());
+
+    }
+
+    @Test
+    void shouldGetBadRequestWhenPostedWithoutContactDetail() throws URISyntaxException, IOException {
+        final String baseUrl = LOCAL_HOST + randomServerPort + CONTACT_API_BASE_PATH;
+        URI uri = new URI(baseUrl);
+
+        HttpHeaders headers = new HttpHeaders();
+        ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_CONTACT_DETAIL), ContactRequest.class);
+        HttpEntity<ContactRequest> request = new HttpEntity<>(contactRequest, headers);
+        ResponseEntity<ContactResponse> result = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
+
+        //Verify request succeed
+        assertEquals(400, result.getStatusCodeValue());
+
+    }
+
+    @Test
+    void shouldGetBadRequestWhenPostedWithoutAddress() throws URISyntaxException, IOException {
+        final String baseUrl = LOCAL_HOST + randomServerPort + CONTACT_API_BASE_PATH;
+        URI uri = new URI(baseUrl);
+
+        HttpHeaders headers = new HttpHeaders();
+        ContactRequest contactRequest = this.objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_ADDRESS), ContactRequest.class);
         HttpEntity<ContactRequest> request = new HttpEntity<>(contactRequest, headers);
         ResponseEntity<ContactResponse> result = this.restTemplate.postForEntity(uri, request, ContactResponse.class);
 

@@ -1,5 +1,7 @@
 package com.jpmc.digital.event.bus.assessment.service;
 
+import com.jpmc.digital.event.bus.assessment.dto.Address;
+import com.jpmc.digital.event.bus.assessment.dto.ContactDetail;
 import com.jpmc.digital.event.bus.assessment.dto.ContactRequest;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.util.CollectionUtils;
@@ -10,6 +12,17 @@ public class ContactValidatorImpl implements ContactValidator {
 
     @Override
     public void validate(ContactRequest contactRequest) {
+        ContactDetail contactDetail = contactRequest.getContactDetail();
+
+        if (contactDetail == null) {
+            throw new MandatoryFieldNotPresentException("contactDetail");
+        }
+
+        Address address = contactDetail.getAddress();
+
+        if (address == null) {
+            throw new MandatoryFieldNotPresentException("address");
+        }
         validate("firstName", contactRequest.getFirstName());
         validate("lastName", contactRequest.getLastName());
         validate("firstLineOfAddress", contactRequest.getContactDetail().getAddress().getFirstLineOfAddress());

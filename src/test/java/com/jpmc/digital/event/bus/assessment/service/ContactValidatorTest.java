@@ -45,4 +45,17 @@ class ContactValidatorTest {
         assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
     }
 
+    @Test
+    void shouldThrowMandatoryFieldNotPresentExceptionWhenAddressNotPresent() throws IOException {
+        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_ADDRESS), ContactRequest.class);
+        assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
+    }
+
+    @Test
+    void shouldThrowMandatoryFieldNotPresentExceptionWhenContactDetailNotPresent() throws IOException {
+        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_CONTACT_DETAIL), ContactRequest.class);
+        assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
+    }
+
+
 }
