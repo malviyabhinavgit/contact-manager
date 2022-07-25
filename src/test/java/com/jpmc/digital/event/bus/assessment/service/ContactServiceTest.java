@@ -39,6 +39,16 @@ class ContactServiceTest {
     }
 
     @Test
+    void shouldCreateContactWhenCalledWhenEitherAddressOrMobilePresent() throws IOException {
+        Contact validContact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_WITHOUT_ADDRESS_JSON), Contact.class);
+        ContactResponse contactResponse = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_WITHOUT_ADDRESS_JSON), ContactResponse.class);
+        when(contactRepository.save(any(Contact.class))).thenReturn(validContact);
+        contactService = new ContactServiceImpl(contactRepository, contactValidator);
+        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_ADDRESS), ContactRequest.class);
+        assertEquals(contactResponse, contactService.save(contactRequest));
+    }
+
+    @Test
     void shouldGetContactWhenContactExists() throws IOException {
         ContactResponse contactResponse = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), ContactResponse.class);
         Contact validContact = objectMapper.readValue(ResourceUtils.getFile(VALID_CONTACT_JSON), Contact.class);
@@ -67,6 +77,20 @@ class ContactServiceTest {
     void shouldThrowMandatoryFieldNotPresentExceptionWhenCalledWithInvalidContactReq() throws IOException {
         contactService = new ContactServiceImpl(contactRepository, contactValidator);
         ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_FIRST_NAME_JSON), ContactRequest.class);
+        assertThrows(MandatoryFieldNotPresentException.class, () -> contactService.save(contactRequest));
+    }
+
+    @Test
+    void shouldThrowMandatoryFieldNotPresentExceptionWhenCalledWithNoContactDetails() throws IOException {
+        contactService = new ContactServiceImpl(contactRepository, contactValidator);
+        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_CONTACT_DETAIL), ContactRequest.class);
+        assertThrows(MandatoryFieldNotPresentException.class, () -> contactService.save(contactRequest));
+    }
+
+    @Test
+    void shouldThrowMandatoryFieldNotPresentExceptionWhenCalledWithNoAddressOrMobile() throws IOException {
+        contactService = new ContactServiceImpl(contactRepository, contactValidator);
+        ContactRequest contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_MOBILE_ADDRESS_DETAIL), ContactRequest.class);
         assertThrows(MandatoryFieldNotPresentException.class, () -> contactService.save(contactRequest));
     }
 

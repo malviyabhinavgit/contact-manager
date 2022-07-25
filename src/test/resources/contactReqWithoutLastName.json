@@ -1,6 +1,6 @@
 {
-  "firstName": "abhinav",
-  "lastName": "string",
+  "firstName": "Abhinav",
+  "lastName": "",
   "contactDetail": {
     "mobileNumber": [
       "+44208012121"
@@ -9,7 +9,7 @@
       "firstLineOfAddress": "Bank Street",
       "lastLineOfAddress": "",
       "city": "London",
-      "postcode": "",
+      "postcode": "E14 5JP",
       "country": "UK"
     }
   }
