@@ -22,20 +22,20 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Contact save(Contact contactRequest) {
-        return contactResponse(contactRepository.save(contact(contactRequest)));
+        return convertEntityToDto(contactRepository.save(convertDtoToEntity(contactRequest)));
     }
 
     @Override
     public Contact getContact(Long contactId) {
-        return contactResponse(contactRepository.getContact(contactId));
+        return convertEntityToDto(contactRepository.getContact(contactId));
     }
 
     @Override
     public List<Contact> getContacts(List<Long> ids) {
-        return contactRepository.getContacts(ids).stream().map(this::contactResponse).collect(Collectors.toList());
+        return contactRepository.getContacts(ids).stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
-    private com.jpmc.digital.event.bus.assessment.entity.Contact contact(Contact contactRequest) {
+    private com.jpmc.digital.event.bus.assessment.entity.Contact convertDtoToEntity(Contact contactRequest) {
 
         contactValidator.validate(contactRequest);
 
@@ -67,7 +67,7 @@ public class ContactServiceImpl implements ContactService {
         }
     }
 
-    private Contact contactResponse(com.jpmc.digital.event.bus.assessment.entity.Contact contact) {
+    private Contact convertEntityToDto(com.jpmc.digital.event.bus.assessment.entity.Contact contact) {
         Contact contactResponse = new Contact();
         contactResponse.setId(contact.getId());
         contactResponse.setFirstName(contact.getFirstName());
