@@ -1,7 +1,7 @@
 package com.jpmc.digital.event.bus.assessment.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jpmc.digital.event.bus.assessment.dto.ContactRequestResponse;
+import com.jpmc.digital.event.bus.assessment.dto.Contact;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
 
@@ -20,27 +20,27 @@ class ContactValidatorTest {
     @Test
     void shouldThrowMandatoryFieldNotPresentExceptionWhenFirstNameNotPresent() throws IOException {
 
-        ContactRequestResponse contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_FIRST_NAME_JSON), ContactRequestResponse.class);
+        Contact contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_FIRST_NAME_JSON), Contact.class);
         assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
     }
 
     @Test
     void shouldThrowMandatoryFieldNotPresentExceptionWhenLastNameNotPresent() throws IOException {
 
-        ContactRequestResponse contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_LAST_NAME_JSON), ContactRequestResponse.class);
+        Contact contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_LAST_NAME_JSON), Contact.class);
         assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
     }
 
 
     @Test
     void shouldThrowMandatoryFieldNotPresentExceptionWhenContactDetailNotPresent() throws IOException {
-        ContactRequestResponse contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_CONTACT_DETAIL), ContactRequestResponse.class);
+        Contact contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_CONTACT_DETAIL), Contact.class);
         assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
     }
 
     @Test
     void shouldThrowMandatoryFieldNotPresentExceptionWhenNoAddressOrMobileNumberPresent() throws IOException {
-        ContactRequestResponse contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_MOBILE_ADDRESS_DETAIL), ContactRequestResponse.class);
+        Contact contactRequest = objectMapper.readValue(ResourceUtils.getFile(CONTACT_REQ_WITHOUT_MOBILE_ADDRESS_DETAIL), Contact.class);
         assertThrows(MandatoryFieldNotPresentException.class, () -> contactValidator.validate(contactRequest));
     }
 }

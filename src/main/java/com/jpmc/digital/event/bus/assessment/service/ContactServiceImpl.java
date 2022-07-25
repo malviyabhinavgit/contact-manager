@@ -2,8 +2,7 @@ package com.jpmc.digital.event.bus.assessment.service;
 
 import com.jpmc.digital.event.bus.assessment.dto.Address;
 import com.jpmc.digital.event.bus.assessment.dto.ContactDetail;
-import com.jpmc.digital.event.bus.assessment.dto.ContactRequestResponse;
-import com.jpmc.digital.event.bus.assessment.entity.Contact;
+import com.jpmc.digital.event.bus.assessment.dto.Contact;
 import com.jpmc.digital.event.bus.assessment.repository.ContactRepositoryImpl;
 
 import java.util.Collections;
@@ -22,39 +21,39 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public ContactRequestResponse save(ContactRequestResponse contactRequest) {
+    public Contact save(Contact contactRequest) {
         return contactResponse(contactRepository.save(contact(contactRequest)));
     }
 
     @Override
-    public ContactRequestResponse getContact(Long contactId) {
+    public Contact getContact(Long contactId) {
         return contactResponse(contactRepository.getContact(contactId));
     }
 
     @Override
-    public List<ContactRequestResponse> getContacts(List<Long> ids) {
+    public List<Contact> getContacts(List<Long> ids) {
         return contactRepository.getContacts(ids).stream().map(this::contactResponse).collect(Collectors.toList());
     }
 
-    private Contact contact(ContactRequestResponse contactRequest) {
+    private com.jpmc.digital.event.bus.assessment.entity.Contact contact(Contact contactRequest) {
 
         contactValidator.validate(contactRequest);
 
-        Contact contact = new Contact();
+        com.jpmc.digital.event.bus.assessment.entity.Contact contact = new com.jpmc.digital.event.bus.assessment.entity.Contact();
         contact.setFirstName(contactRequest.getFirstName());
         contact.setLastName(contactRequest.getLastName());
         populateContactWithAvailableContactDetails(contactRequest, contact);
         return contact;
     }
 
-    private void populateContactWithAvailableContactDetails(ContactRequestResponse contactRequest, Contact contact) {
+    private void populateContactWithAvailableContactDetails(Contact contactRequest, com.jpmc.digital.event.bus.assessment.entity.Contact contact) {
         com.jpmc.digital.event.bus.assessment.entity.ContactDetail contactDetail = new com.jpmc.digital.event.bus.assessment.entity.ContactDetail();
         populateAddressForContactIfPresent(contactRequest, contactDetail);
         contactDetail.setMobileNumber(Collections.unmodifiableList(contactRequest.getContactDetail().getMobileNumber()));
         contact.setContactDetail(contactDetail);
     }
 
-    private void populateAddressForContactIfPresent(ContactRequestResponse contactRequest, com.jpmc.digital.event.bus.assessment.entity.ContactDetail contactDetail) {
+    private void populateAddressForContactIfPresent(Contact contactRequest, com.jpmc.digital.event.bus.assessment.entity.ContactDetail contactDetail) {
 
         Address addressFromReq = contactRequest.getContactDetail().getAddress();
         if (addressFromReq != null) {
@@ -68,8 +67,8 @@ public class ContactServiceImpl implements ContactService {
         }
     }
 
-    private ContactRequestResponse contactResponse(Contact contact) {
-        ContactRequestResponse contactResponse = new ContactRequestResponse();
+    private Contact contactResponse(com.jpmc.digital.event.bus.assessment.entity.Contact contact) {
+        Contact contactResponse = new Contact();
         contactResponse.setId(contact.getId());
         contactResponse.setFirstName(contact.getFirstName());
         contactResponse.setLastName(contact.getLastName());
@@ -77,7 +76,7 @@ public class ContactServiceImpl implements ContactService {
         return contactResponse;
     }
 
-    private void populateContactRespWithAvailableContactDetails(Contact contact, ContactRequestResponse contactResponse) {
+    private void populateContactRespWithAvailableContactDetails(com.jpmc.digital.event.bus.assessment.entity.Contact contact, Contact contactResponse) {
         com.jpmc.digital.event.bus.assessment.entity.ContactDetail contactDetail = contact.getContactDetail();
 
         if (contactDetail != null) {
